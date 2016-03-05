@@ -13,9 +13,12 @@ statscreen = Panel(60, 0, 20, 50, border=True)
 mapgen = MapGen(58, 38)
 while not gamewindow.is_window_closed:
     testmap = CM.get_Component('Map', mapgen.create(random.random()))
+    middle = CM.get_Component('Seen', testmap.TileIds[58 / 2][38 / 2])
+    middle.seen = True
     for y in range(testmap.Height):
         for x in range(testmap.Width):
-            if CM.get_Component('Seen', testmap.TileIds[x][y]):
+            checktile = CM.get_Component('Seen', testmap.TileIds[x][y])
+            if checktile.seen:
                 tile = CM.get_Component('Tile', testmap.TileIds[x][y])
                 playscreen.write(x + 1, y + 1, tile.Char)
     gamewindow.clear
