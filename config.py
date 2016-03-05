@@ -1,0 +1,15 @@
+window_width = 80
+window_height = 50
+window_title = '26Down - By Akhier Dragonheart'
+playscreen_width = int(window_width * .75)
+playscreen_height = int(window_height * .8)
+playscreen_x = 0
+playscreen_y = 0
+messagescreen_width = playscreen_width
+messagescreen_height = window_height - playscreen_height
+messagescreen_x = playscreen_x
+messagescreen_y = playscreen_height
+statscreen_width = window_width - playscreen_width
+statscreen_height = window_height
+statscreen_x = playscreen_width
+statscreen_y = playscreen_y
