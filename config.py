@@ -4,6 +4,9 @@ from Console import Console
 from Panel import Panel
 import libtcodpy
 
+
+Id = []
+Component = {}
 window_width = 80
 window_height = 50
 window_title = '26Down - By Akhier Dragonheart'

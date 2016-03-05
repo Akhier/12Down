@@ -1,4 +1,4 @@
-Component = {}
+from config import Component
 
 
 class ComponentManager:

@@ -1,7 +1,5 @@
 from uuid import uuid4
-
-
-Id = []
+from config import Id
 
 
 class EntityManager:
