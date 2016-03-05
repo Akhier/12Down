@@ -19,7 +19,7 @@ def Menu(header, options, width):
     letter_index = ord('a')
     for option_text in options:
         text = '(' + chr(letter_index) + ') ' + option_text
-        menupanel.write_wrap_ex(0, y, text, libtcodpy.LEFT)
+        menupanel.write(0, y, text)
         y += 1
         letter_index += 1
 

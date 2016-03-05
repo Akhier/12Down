@@ -2,7 +2,7 @@ from S_RecursiveShadowCasting import Fov_RSC
 from S_MakeMap import MapGen
 from Console import Console
 from Panel import Panel
-
+import libtcodpy
 
 window_width = 80
 window_height = 50
@@ -31,3 +31,6 @@ statscreen = Panel(statscreen_x, statscreen_y,
                    border=True)
 fov = Fov_RSC(playscreen_width, playscreen_height)
 mapgen = MapGen(playscreen_width, playscreen_height)
+CENTER = libtcodpy.CENTER
+LEFT = libtcodpy.LEFT
+RIGHT = libtcodpy.RIGHT
