@@ -54,9 +54,10 @@ class Panel:
         libtcodpy.console_print_ex(self._panel, x, y, flag,
                                    align, txt)
 
-    def write_ex(self, x, y, txt, fore, back):
+    def write_ex(self, x, y, txt, fore, back=False):
         self.set_default_foreground(fore)
-        self.set_default_background(back)
+        if back is not False:
+            self.set_default_background(back)
         self.write(x, y, txt)
 
     def write_wrap(self, x, y, w, h, txt):
