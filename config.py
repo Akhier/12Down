@@ -7,6 +7,9 @@ import libtcodpy
 
 Id = []
 Component = {}
+DungeonLevelIds = []
+PlayerId = False
+game_msg = []
 window_width = 80
 window_height = 50
 window_title = '26Down - By Akhier Dragonheart'
@@ -18,6 +21,8 @@ messagescreen_width = playscreen_width
 messagescreen_height = window_height - playscreen_height
 messagescreen_x = playscreen_x
 messagescreen_y = playscreen_height
+message_width = messagescreen_width - 2
+message_height = messagescreen_height - 2
 statscreen_width = window_width - playscreen_width
 statscreen_height = window_height
 statscreen_x = playscreen_width
