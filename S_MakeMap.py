@@ -43,6 +43,7 @@ class MapGen:
                 newtileid = EntityManager.new_Id()
                 ComponentManager.add_Component(newtileid, 'Tile',
                                                tilearray[x][y])
+                ComponentManager.add_Component(newtileid, 'Seen', False)
                 tilearray[x][y] = newtileid
         newmap.TileIds = tilearray
         newmapid = EntityManager.new_Id()

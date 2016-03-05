@@ -15,8 +15,9 @@ while not gamewindow.is_window_closed:
     testmap = CM.get_Component('Map', mapgen.create(random.random()))
     for y in range(testmap.Height):
         for x in range(testmap.Width):
-            tile = CM.get_Component('Tile', testmap.TileIds[x][y])
-            playscreen.write(x + 1, y + 1, tile.Char)
+            if CM.get_Component('Seen', testmap.TileIds[x][y]):
+                tile = CM.get_Component('Tile', testmap.TileIds[x][y])
+                playscreen.write(x + 1, y + 1, tile.Char)
     gamewindow.clear
     playscreen.blit()
     messagescreen.blit()
