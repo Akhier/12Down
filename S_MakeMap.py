@@ -9,11 +9,11 @@ import math
 
 class MapGen:
 
-    def __init__(self):
+    def __init__(self, width, height):
         self.roomsize = (3, 7)
         self.roomoffset = (2, 5)
-        self.width = 60
-        self.height = 60
+        self.width = width
+        self.height = height
         self.maxdepth = 4
         self.usedtiles = []
         self.rooms = []
@@ -50,7 +50,6 @@ class MapGen:
         return newmapid
 
     def _process_ring(self, ring, depth):
-        print('starting depth ' + str(depth) + ' ring len ' + str(len(ring)))
         newring = []
         while ring:
             for room in ring:
@@ -111,7 +110,6 @@ class MapGen:
             self._clean_up_last_ring(newring)
 
     def _clean_up_last_ring(self, ring):
-        print('starting clean up of last ring')
         while ring:
             random.shuffle(ring)
             currentroom = ring.pop()
