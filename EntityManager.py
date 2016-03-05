@@ -1,5 +1,5 @@
 from uuid import uuid4
-from config import Id
+import config
 
 
 class EntityManager:
@@ -7,13 +7,9 @@ class EntityManager:
     @classmethod
     def new_Id(self):
         nId = str(uuid4())
-        Id.append(nId)
+        config.Id.append(nId)
         return nId
 
     @classmethod
     def remove_Id(self, rId):
-        Id.remove(rId)
-
-    @classmethod
-    def lst_Ids(self):
-        return Id
+        config.Id.remove(rId)

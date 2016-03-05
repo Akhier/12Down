@@ -1,22 +1,22 @@
-from config import Component
+import config
 
 
 class ComponentManager:
 
     @classmethod
     def new_Component(self, componentname):
-        if componentname not in Component:
-            Component[componentname] = {}
+        if componentname not in config.Component:
+            config.Component[componentname] = {}
 
     @classmethod
     def dict_of(self, componentname):
-        return Component[componentname]
+        return config.Component[componentname]
 
     @classmethod
     def add_Component(self, Id, componentname, component):
-        if componentname not in Component:
+        if componentname not in config.Component:
             ComponentManager.new_Component(componentname)
-        Component[componentname][Id] = component
+        config.Component[componentname][Id] = component
 
     @classmethod
     def add_Components(self, Id, componentdict):
@@ -25,8 +25,8 @@ class ComponentManager:
 
     @classmethod
     def remove_Component(self, componentname, Id):
-        if Id in Component[componentname]:
-            del Component[componentname][Id]
+        if Id in config.Component[componentname]:
+            del config.Component[componentname][Id]
 
     @classmethod
     def remove_Components(self, componentnamelist, Id):
@@ -35,12 +35,12 @@ class ComponentManager:
 
     @classmethod
     def cleanup(self, Id):
-        for key in Component:
+        for key in config.Component:
             ComponentManager.remove_Component(key, Id)
 
     @classmethod
     def get_Component(self, componentname, Id):
-        return Component[componentname][Id]
+        return config.Component[componentname][Id]
 
     @classmethod
     def get_Components(self, componentname, Idlist):
