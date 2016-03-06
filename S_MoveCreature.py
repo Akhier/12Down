@@ -15,3 +15,5 @@ def Walk_Direction(creatureid, direction):
                     walkable = False
     if walkable:
         cCoord = newCoord
+    else:
+        return False

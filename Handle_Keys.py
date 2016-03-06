@@ -1,7 +1,9 @@
+from ComponentManager import ComponentManager as CM
+from Enum_Direction import Direction as Dir
+from S_MoveCreature import Walk_Direction
 from Menu import Menu
 import libtcodpy
 import config
-import Color
 
 
 def Handle_Keys():
@@ -14,28 +16,36 @@ def Handle_Keys():
     if config.game_state == 'playing':
         if config.key.vk == libtcodpy.KEY_UP or \
                 config.key.vk == libtcodpy.KEY_KP8:
-            player_move_or_attack(0, -1)
+            if Walk_Direction(config.PlayerId, Dir.N):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_DOWN or \
                 config.key.vk == libtcodpy.KEY_KP2:
-            player_move_or_attack(0, 1)
+            if Walk_Direction(config.PlayerId, Dir.S):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_LEFT or \
                 config.key.vk == libtcodpy.KEY_KP4:
-            player_move_or_attack(-1, 0)
+            if Walk_Direction(config.PlayerId, Dir.W):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_RIGHT or \
                 config.key.vk == libtcodpy.KEY_KP6:
-            player_move_or_attack(1, 0)
+            if Walk_Direction(config.PlayerId, Dir.E):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_HOME or \
                 config.key.vk == libtcodpy.KEY_KP7:
-            player_move_or_attack(-1, -1)
+            if Walk_Direction(config.PlayerId, Dir.NW):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_PAGEUP or \
                 config.key.vk == libtcodpy.KEY_KP9:
-            player_move_or_attack(1, -1)
+            if Walk_Direction(config.PlayerId, Dir.NE):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_END or \
                 config.key.vk == libtcodpy.KEY_KP1:
-            player_move_or_attack(-1, 1)
+            if Walk_Direction(config.PlayerId, Dir.SW):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_PAGEDOWN or \
                 config.key.vk == libtcodpy.KEY_KP3:
-            player_move_or_attack(1, 1)
+            if Walk_Direction(config.PlayerId, Dir.SE):
+                config.fov_recompute = True
         elif config.key.vk == libtcodpy.KEY_KP5:
             pass
 
@@ -64,16 +74,15 @@ def Handle_Keys():
             #         chosen_item.drop()
 
             if key_char == 'c':
-                level_up_xp = config.LEVEL_UP_BASE + \
-                    config.player.level * \
-                    config.LEVEL_UP_FACTOR
+                pCreature = CM.get_Component('Creature', config.PlayerId)
                 msgbox('Character information\n\nLevel: ' +
                        str(config.player.level) +
-                       '\nExperiance: ' + str(config.player.fighter.xp) +
-                       '\nExperiance to level up: ' + str(level_up_xp) +
-                       '\nMaximum HP: ' + str(config.player.fighter.max_hp) +
-                       '\nAttack: ' + str(config.player.fighter.power) +
-                       '\nDefense: ' + str(config.player.fighter.defense),
+                       '\nExperiance: ' + str(pCreature.Xp) +
+                       '\nExperiance to level up: ' + str(config.xptolevel) +
+                       '\nMaximum HP: ' + str(pCreature.MaxHp) +
+                       '\nBase Defense: ' + str(pCreature.BaseDefense) +
+                       '\nBase Strength: ' + str(pCreature.BaseStrength) +
+                       '\nBase Agility: ' + str(pCreature.BaseAgility),
                        config.CHARACTER_SCREEN_WIDTH)
 
             # if key_char == '<':

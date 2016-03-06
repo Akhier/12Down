@@ -1,4 +1,5 @@
 from ComponentManager import ComponentManager as CM
+from Handle_Keys import Handle_Keys
 from S_MapInfo import char_map
 from Render import Render
 from Menu import Menu
@@ -30,7 +31,7 @@ def Play_Game():
             y = objectcoord.Y
             if config.visible[x][y]:
                 config.playscreen.write(x, y, charmap[x][y])
-        #   get player action
+        config.player_action = Handle_Keys()
         if config.player_action == 'exit':
             #   Save game
             break
@@ -44,6 +45,7 @@ def check_level_up():
     level_up_xp = int(config.xptolevel * config.xpscale)
     playercreature = CM.get_Component('Creature', config.PlayerId)
     if playercreature.Xp >= level_up_xp:
+        playercreature.Xp = 0
         playerlevel = CM.get_Component('Level', config.PlayerId)
         playerlevel += 1
         config.xptolevel = level_up_xp
