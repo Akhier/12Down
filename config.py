@@ -8,6 +8,7 @@ import libtcodpy
 DungeonLevelIds = []
 CurrentDungeonLevel = 0
 PlayerId = False
+PlayerAttack = False
 game_msgs = []
 window_width = 80
 window_height = 50

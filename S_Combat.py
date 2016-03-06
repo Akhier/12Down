@@ -33,3 +33,11 @@ def Attack_Creature(attackid, attackerid, defenderid):
         defender.CurHp -= damage
         if defender.CurHp <= 0:
             pass   # Make Creature Die Here
+
+
+def Attack_Coord(attackid, attackerid, coordtoattack):
+    coords = CM.dict_of('Coord')
+    creatures = CM.dict_of('Creature')
+    for key, value in coords.iteritems():
+        if value == coordtoattack and key in creatures:
+            Attack_Creature(attackid, attackerid, key)

@@ -2,6 +2,7 @@ from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_DungeonLevel import DungeonLevel
 from C_Creature import Creature
+from C_Attack import Attack
 from Message import Message
 from C_Coord import Coord
 from C_Flags import Level
@@ -16,6 +17,7 @@ def New_Game():
     config.DungeonLevelIds = []
     config.CurrentDungeonLevel = 1
     config.PlayerId = EM.new_Id()
+    config.PlayerAttack = EM.new_Id()
     config.fov_recompute = True
     config.game_msg = []
     config.game_state = 'playing'
@@ -28,6 +30,7 @@ def New_Game():
     CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10,
                                                            10, 7, 0))
     CM.add_Component(config.PlayerId, 'Level', Level())
+    CM.add_Component(config.PlayerAttack, 'Attack', Attack(1, 4))
     firstlevelid = EM.new_Id()
     mapid = config.mapgen.create(firstlevelid)
     config.DungeonLevelIds.append(firstlevelid)

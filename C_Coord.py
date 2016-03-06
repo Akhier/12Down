@@ -11,3 +11,6 @@ class Coord:
     @classmethod
     def coord(self):
         return (self.X, self.Y)
+
+    def get_coord_from_self(self, coord):
+        return Coord(self.X + coord.X, self.Y + coord.Y)
