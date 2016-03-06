@@ -1,5 +1,7 @@
 from uuid import uuid4
-import config
+
+
+Id = []
 
 
 class EntityManager:
@@ -7,9 +9,9 @@ class EntityManager:
     @classmethod
     def new_Id(self):
         nId = str(uuid4())
-        config.Id.append(nId)
+        Id.append(nId)
         return nId
 
     @classmethod
     def remove_Id(self, rId):
-        config.Id.remove(rId)
+        Id.remove(rId)

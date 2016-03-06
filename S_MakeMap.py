@@ -1,4 +1,4 @@
-from ComponentManager import ComponentManager
+from ComponentManager import ComponentManager as CM
 from S_BresenhamLineAlgo import get_line
 from EntityManager import EntityManager
 from C_Flags import Seen
@@ -42,13 +42,12 @@ class MapGen:
                 if not tilearray[x][y]:
                     tilearray[x][y] = Tile('Stone Wall', '#', False, False)
                 newtileid = EntityManager.new_Id()
-                ComponentManager.add_Component(newtileid, 'Tile',
-                                               tilearray[x][y])
-                ComponentManager.add_Component(newtileid, 'Seen', Seen())
+                CM.add_Component(newtileid, 'Tile', tilearray[x][y])
+                CM.add_Component(newtileid, 'Seen', Seen())
                 tilearray[x][y] = newtileid
         newmap.TileIds = tilearray
         newmapid = EntityManager.new_Id()
-        ComponentManager.add_Component(newmapid, 'Map', newmap)
+        CM.add_Component(newmapid, 'Map', newmap)
         return newmapid
 
     def _process_ring(self, ring, depth):

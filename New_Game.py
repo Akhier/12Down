@@ -1,6 +1,7 @@
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_DungeonLevel import DungeonLevel
+from C_Creature import Creature
 from Message import Message
 from C_Coord import Coord
 from C_Tile import Tile
@@ -9,13 +10,14 @@ import Color
 
 
 def New_Game():
-    config.Id = []
-    config.Component = {}
+    EM.Id = []
+    CM.Component = {}
     config.DungeonLevelIds = []
     config.PlayerId = EM.new_Id()
     config.game_msg = []
     CM.add_Component(config.PlayerId, 'Tile', Tile('Player', '@', False, True))
     CM.add_Component(config.PlayerId, 'Coord', Coord(-1, -1))
+    CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10, 10, 0))
     firstlevelid = EM.new_Id()
     CM.add_Component(firstlevelid, 'Map', config.mapgen.create(firstlevelid))
     config.DungeonLevelIds.append(firstlevelid)

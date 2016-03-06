@@ -5,11 +5,9 @@ from Panel import Panel
 import libtcodpy
 
 
-Id = []
-Component = {}
 DungeonLevelIds = []
 PlayerId = False
-game_msg = []
+game_msgs = []
 window_width = 80
 window_height = 50
 window_title = '26Down - By Akhier Dragonheart'

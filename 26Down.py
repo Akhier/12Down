@@ -1,3 +1,4 @@
+from New_Game import New_Game
 from Color import light_red
 from Menu import Menu
 import config
@@ -13,6 +14,7 @@ while not config.gamewindow.is_window_closed:
                             'By Akhier', align=config.CENTER)
     choice = Menu('', ['New game', 'Continue', 'Quit'], 14)
     if choice == 0:
+        New_Game()
         pass   # New Game then Play Game
     if choice == 1:
         pass   # try Load Game except Menu error then Play Game

@@ -1,9 +1,9 @@
 import textwrap
 import config
-import color
+import Color
 
 
-def Message(new_msg, color=color.white):
+def Message(new_msg, color=Color.white):
     new_msg_lines = textwrap.wrap(new_msg, config.message_width)
 
     for line in new_msg_lines:
