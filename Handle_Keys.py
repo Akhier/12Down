@@ -1,4 +1,3 @@
-from ComponentManager import ComponentManager as CM
 from Enum_Direction import Direction as Dir
 from S_MoveCreature import Walk_Direction
 from Menu import Menu

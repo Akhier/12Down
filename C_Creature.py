@@ -8,3 +8,15 @@ class Creature:
         self.BaseAgility = agility
         self.VisionRange = visionrange
         self.Xp = xp
+
+    @property
+    def Defense(self):
+        return self.BaseDefense
+
+    @property
+    def Strength(self):
+        return self.BaseStrength
+
+    @property
+    def Agility(self):
+        return self.BaseAgility
