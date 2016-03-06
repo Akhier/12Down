@@ -9,11 +9,9 @@ def Walk_Direction(creatureid, direction):
     walkable = True
     for key, value in Coords:
         if value == newCoord:
-            try:
+            if CM.check_Component('Tile', key):
                 tile = CM.get_Component('Tile', key)
                 if not tile.Passable:
                     walkable = False
-            except:
-                pass
     if walkable:
         cCoord = newCoord

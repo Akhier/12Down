@@ -49,3 +49,10 @@ class ComponentManager:
             component = ComponentManager.get_Component(componentname, Id)
             components[Id] = component
         return components
+
+    @classmethod
+    def check_Component(self, componentname, Id):
+        if Component[componentname][Id]:
+            return True
+        else:
+            return False
