@@ -26,7 +26,7 @@ def New_Game():
                      Coord(config.playscreen_width / 2,
                            config.playscreen_height / 2))
     CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10,
-                                                           10, 0, 6))
+                                                           10, 6, 0))
     CM.add_Component(config.PlayerId, 'Level', Level())
     firstlevelid = EM.new_Id()
     mapid = config.mapgen.create(firstlevelid)

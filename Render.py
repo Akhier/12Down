@@ -14,20 +14,15 @@ def Render():
     if config.fov_recompute:
         config.fov_recompute = False
         curmap = CM.get_Component('Map', curmapid)
-        seethrough = seethrough_map(curmapid)
         charmap = char_map(curmapid)
-        config.visible = config.fov.Calculate_Sight(seethrough,
+        config.visible = config.fov.Calculate_Sight(seethrough_map(curmapid),
                                                     playercoord.X,
                                                     playercoord.Y,
                                                     playercreature.VisionRange)
         for y in range(config.playscreen_height):
             for x in range(config.playscreen_width):
-                config.playscreen.write_ex(x, y, charmap[x][y],
-                                           Color.light_red)
                 s = CM.get_Component('Seen', curmap.TileIds[x][y])
                 if not config.visible[x][y]:
-                    config.playscreen.write_ex(x, y, charmap[x][y],
-                                               Color.sky)
                     if s.seen:
                         config.playscreen.write_ex(x, y, charmap[x][y],
                                                    Color.map_tile_seen)
