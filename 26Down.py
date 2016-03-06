@@ -1,3 +1,4 @@
+from Play_Game import Play_Game
 from New_Game import New_Game
 from Color import light_red
 from Menu import Menu
@@ -15,7 +16,7 @@ while not config.gamewindow.is_window_closed:
     choice = Menu('', ['New game', 'Continue', 'Quit'], 14)
     if choice == 0:
         New_Game()
-        pass   # New Game then Play Game
+        Play_Game()
     if choice == 1:
         pass   # try Load Game except Menu error then Play Game
     elif choice == 2:

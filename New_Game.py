@@ -14,13 +14,17 @@ def New_Game():
     EM.Id = []
     CM.Component = {}
     config.DungeonLevelIds = []
+    config.CurrentDungeonLevel = 1
     config.PlayerId = EM.new_Id()
+    config.fov_recompute = True
     config.game_msg = []
     config.game_state = 'playing'
     config.xptolevel = 66.6
-    CM.add_Component(config.PlayerId, 'Tile', Tile('Player', '@', False, True))
+    CM.add_Component(config.PlayerId, 'Tile', Tile('Player', '@', False,
+                                                   True, Color.sky))
     CM.add_Component(config.PlayerId, 'Coord', Coord(-1, -1))
-    CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10, 10, 0))
+    CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10,
+                                                           10, 0, 6))
     CM.add_Component(config.PlayerId, 'Level', Level())
     firstlevelid = EM.new_Id()
     CM.add_Component(firstlevelid, 'Map', config.mapgen.create(firstlevelid))

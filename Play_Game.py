@@ -1,4 +1,5 @@
 from ComponentManager import ComponentManager as CM
+from Render import Render
 from Menu import Menu
 import libtcodpy
 import config
@@ -12,7 +13,7 @@ def Play_Game():
         libtcodpy.sys_check_for_event(libtcodpy.EVENT_KEY_PRESS |
                                       libtcodpy.EVENT_MOUSE,
                                       config.key, config.mouse)
-        #   Render here
+        Render()
         config.gamewindow.flush
         check_level_up
         #   Clear objects on map
