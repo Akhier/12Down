@@ -49,8 +49,8 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_KP5:
             pass
 
-        else:
-            key_char = chr(config.key.c)
+        # else:
+        #     key_char = chr(config.key.c)
 
             # if key_char == 'g':
             #     for object in config.objects:
@@ -72,18 +72,6 @@ def Handle_Keys():
             #                                  'other to cancel.\n')
             #     if chosen_item is not None:
             #         chosen_item.drop()
-
-            if key_char == 'c':
-                pCreature = CM.get_Component('Creature', config.PlayerId)
-                msgbox('Character information\n\nLevel: ' +
-                       str(config.player.level) +
-                       '\nExperiance: ' + str(pCreature.Xp) +
-                       '\nExperiance to level up: ' + str(config.xptolevel) +
-                       '\nMaximum HP: ' + str(pCreature.MaxHp) +
-                       '\nBase Defense: ' + str(pCreature.BaseDefense) +
-                       '\nBase Strength: ' + str(pCreature.BaseStrength) +
-                       '\nBase Agility: ' + str(pCreature.BaseAgility),
-                       config.CHARACTER_SCREEN_WIDTH)
 
             # if key_char == '<':
             #     if config.stairs.x == config.player.x and \

@@ -5,6 +5,7 @@ from Render import Render
 from Menu import Menu
 import libtcodpy
 import config
+import Color
 
 
 def Play_Game():
@@ -24,16 +25,19 @@ def Play_Game():
         objectids.extend(dungeonlevel.ItemIds)
         objectids.extend(dungeonlevel.FeatureIds)
         objectids.extend(dungeonlevel.MonsterIds)
+        objectids.append(config.PlayerId)
         charmap = char_map(dungeonlevel.MapId)
         for objectid in objectids:
             objectcoord = CM.get_Component('Coord', objectid)
             x = objectcoord.X
             y = objectcoord.Y
             if config.visible[x][y]:
-                config.playscreen.write(x, y, charmap[x][y])
+                config.playscreen.write_ex(x, y, charmap[x][y],
+                                           Color.map_tile_visible)
         config.player_action = Handle_Keys()
         if config.player_action == 'exit':
             #   Save game
+            config.gamewindow.clear
             break
         if config.player_action == 'playing' and \
                 config.player_action != 'no action':

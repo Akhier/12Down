@@ -7,13 +7,15 @@ def Walk_Direction(creatureid, direction):
     newCoord = Coord(cCoord.X + direction.X, cCoord.Y + direction.Y)
     Coords = CM.dict_of('Coord')
     walkable = True
-    for key, value in Coords:
+    for key, value in Coords.iteritems():
         if value == newCoord:
             if CM.check_Component('Tile', key):
                 tile = CM.get_Component('Tile', key)
                 if not tile.Passable:
                     walkable = False
     if walkable:
-        cCoord = newCoord
+        cCoord.X = newCoord.X
+        cCoord.Y = newCoord.Y
+        return True
     else:
         return False
