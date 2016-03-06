@@ -6,6 +6,7 @@ import libtcodpy
 
 
 DungeonLevelIds = []
+CurrentDungeonLevel = 0
 PlayerId = False
 game_msgs = []
 window_width = 80
@@ -15,6 +16,7 @@ playscreen_width = int(window_width * .75)
 playscreen_height = int(window_height * .8)
 playscreen_x = 0
 playscreen_y = 0
+visible = []
 messagescreen_width = playscreen_width
 messagescreen_height = window_height - playscreen_height
 messagescreen_x = playscreen_x
@@ -38,6 +40,7 @@ statscreen = Panel(statscreen_x, statscreen_y,
                    statscreen_width, statscreen_height,
                    border=True)
 fov = Fov_RSC(playscreen_width, playscreen_height)
+fov_recompute = True
 mapgen = MapGen(playscreen_width, playscreen_height)
 player_action = None
 game_state = False
