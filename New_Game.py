@@ -22,14 +22,16 @@ def New_Game():
     config.xptolevel = 66.6
     CM.add_Component(config.PlayerId, 'Tile', Tile('Player', '@', False,
                                                    True, Color.sky))
-    CM.add_Component(config.PlayerId, 'Coord', Coord(-1, -1))
+    CM.add_Component(config.PlayerId, 'Coord',
+                     Coord(config.playscreen_width / 2,
+                           config.playscreen_height / 2))
     CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10,
                                                            10, 0, 6))
     CM.add_Component(config.PlayerId, 'Level', Level())
     firstlevelid = EM.new_Id()
-    CM.add_Component(firstlevelid, 'Map', config.mapgen.create(firstlevelid))
+    mapid = config.mapgen.create(firstlevelid)
     config.DungeonLevelIds.append(firstlevelid)
-    firstlevel = DungeonLevel(1)
+    firstlevel = DungeonLevel(1, mapid)
     CM.add_Component(firstlevelid, 'DungeonLevel', firstlevel)
     Message('Welcome young adventurer! You have just entered my dungeon and' +
             ' through my deal with the adventurers guild you may explore my' +

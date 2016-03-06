@@ -5,9 +5,12 @@ import Color
 
 
 def Render():
-    curmapid = config.DungeonLevelIds[config.CurrentDungeonLevel]
+    dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel - 1]
+    dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+    curmapid = dungeonlevel.MapId
     playercoord = CM.get_Component('Coord', config.PlayerId)
     playercreature = CM.get_Component('Creature', config.PlayerId)
+    playertile = CM.get_Component('Tile', config.PlayerId)
     if config.fov_recompute:
         config.fov_recompute = False
         curmap = CM.get_Component('Map', curmapid)
@@ -19,8 +22,12 @@ def Render():
                                                     playercreature.VisionRange)
         for y in range(config.playscreen_height):
             for x in range(config.playscreen_width):
+                config.playscreen.write_ex(x, y, charmap[x][y],
+                                           Color.light_red)
                 s = CM.get_Component('Seen', curmap.TileIds[x][y])
                 if not config.visible[x][y]:
+                    config.playscreen.write_ex(x, y, charmap[x][y],
+                                               Color.sky)
                     if s.seen:
                         config.playscreen.write_ex(x, y, charmap[x][y],
                                                    Color.map_tile_seen)
@@ -28,7 +35,6 @@ def Render():
                     config.playscreen.write_ex(x, y, charmap[x][y],
                                                Color.map_tile_visible)
                     s.seen = True
-    dungeonlevel = CM.get_Component('DungeonLevel', curmapid)
     for itemid in dungeonlevel.ItemIds:
         coord = CM.get_Component('Coord', itemid)
         s = CM.get_Component('Seen', itemid)
@@ -51,7 +57,7 @@ def Render():
             monster = CM.get_Component('Tile', monsterid)
             config.playscreen.write_ex(x, y, monster.Char, monster.Color)
     config.playscreen.write_ex(playercoord.X, playercoord.Y,
-                               playercreature.Char, playercreature.Color)
+                               playertile.Char, playertile.Color)
     config.messagescreen.clear
     y = 1
     for (line, messagecolor) in config.game_msgs:
