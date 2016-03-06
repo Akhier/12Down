@@ -60,6 +60,21 @@ def Render():
         config.messagescreen.write(1, y, line)
         config.messagescreen.set_default_foreground(Color.white)
         y += 1
+    render_bar(1, 2, config.statscreen_width - 4, 'HP', playercreature.CurHp,
+               playercreature.MaxHp, Color.light_red, Color.darker_red)
     config.playscreen.blit()
     config.messagescreen.blit()
     config.statscreen.blit()
+
+
+def render_bar(x, y, total_width, name, value, maximum, bar_color, back_color):
+    bar_width = int(float(value) / maximum * total_width)
+    config.statscreen.set_default_background(back_color)
+    config.statscreen.rect(x, y, total_width, 1, False)
+    config.statscreen.set_default_background(bar_color)
+    if bar_width > 0:
+        config.statscreen.rect(x, y, bar_width, 1, False)
+    config.statscreen.set_default_foreground(Color.white)
+    config.statscreen.write(x + total_width / 2, y, name + ': ' +
+                            str(value) + '/' + str(maximum),
+                            align=config.CENTER)

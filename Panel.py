@@ -58,7 +58,7 @@ class Panel:
         self.set_default_foreground(fore)
         if back is not False:
             self.set_default_background(back)
-        self.write(x, y, txt)
+        self.write(x, y, txt, flag=libtcodpy.BKGND_DEFAULT)
 
     def write_wrap(self, x, y, w, h, txt):
         libtcodpy.console_print_rect(self._panel, x, y, w, h, txt)
