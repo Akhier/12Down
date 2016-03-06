@@ -30,6 +30,7 @@ def Play_Game():
             y = objectcoord.Y
             if config.visible[x][y]:
                 config.playscreen.write(x, y, charmap[x][y])
+        #   get player action
         if config.player_action == 'exit':
             #   Save game
             break

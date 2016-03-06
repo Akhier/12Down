@@ -1,6 +1,7 @@
 from ComponentManager import ComponentManager as CM
 from S_BresenhamLineAlgo import get_line
 from EntityManager import EntityManager
+from C_Coord import Coord
 from C_Flags import Seen
 from C_Tile import Tile
 from C_Map import Map
@@ -44,6 +45,7 @@ class MapGen:
                 newtileid = EntityManager.new_Id()
                 CM.add_Component(newtileid, 'Tile', tilearray[x][y])
                 CM.add_Component(newtileid, 'Seen', Seen())
+                CM.add_Component(newtileid, 'Coord', Coord(x, y))
                 tilearray[x][y] = newtileid
         newmap.TileIds = tilearray
         newmapid = EntityManager.new_Id()
