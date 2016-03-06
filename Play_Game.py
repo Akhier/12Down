@@ -1,4 +1,5 @@
 from ComponentManager import ComponentManager as CM
+from S_MapInfo import char_map
 from Render import Render
 from Menu import Menu
 import libtcodpy
@@ -16,7 +17,19 @@ def Play_Game():
         Render()
         config.gamewindow.flush
         check_level_up
-        #   Clear objects on map
+        dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel - 1]
+        dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+        objectids = []
+        objectids.extend(dungeonlevel.ItemIds)
+        objectids.extend(dungeonlevel.FeatureIds)
+        objectids.extend(dungeonlevel.MonsterIds)
+        charmap = char_map(dungeonlevel.MapId)
+        for objectid in objectids:
+            objectcoord = CM.get_Component('Coord', objectid)
+            x = objectcoord.X
+            y = objectcoord.Y
+            if config.visible[x][y]:
+                config.playscreen.write(x, y, charmap[x][y])
         if config.player_action == 'exit':
             #   Save game
             break
