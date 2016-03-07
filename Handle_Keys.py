@@ -114,9 +114,12 @@ def next_level():
     config.fov_recompute = True
     config.playscreen.clear
     config.CurrentDungeonLevel += 1
-    newlevelid = EM.new_Id()
-    config.DungeonLevelIds[config.CurrentDungeonLevel] = newlevelid
-    mapid = config.mapgen.create(newlevelid)
-    newlevel = DungeonLevel(config.CurrentDungeonLevel, mapid)
-    CM.add_Component(newlevelid, 'DungeonLevel', newlevel)
-    Place_Monsters_On_Level(newlevelid)
+    if config.CurrentDungeonLevel < 26:
+        newlevelid = EM.new_Id()
+        config.DungeonLevelIds[config.CurrentDungeonLevel] = newlevelid
+        mapid = config.mapgen.create(newlevelid)
+        newlevel = DungeonLevel(config.CurrentDungeonLevel, mapid)
+        CM.add_Component(newlevelid, 'DungeonLevel', newlevel)
+        Place_Monsters_On_Level(newlevelid)
+    else:
+        pass   # End game screen
