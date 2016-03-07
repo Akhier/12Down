@@ -1,6 +1,7 @@
 class Creature:
 
-    def __init__(self, hp, defense, strength, agility, visionrange, xp):
+    def __init__(self, hp, defense, strength, agility,
+                 visionrange, xp, special={}):
         self.MaxHp = hp
         self.CurHp = hp
         self.BaseDefense = defense
@@ -8,6 +9,7 @@ class Creature:
         self.BaseAgility = agility
         self.VisionRange = visionrange
         self.Xp = xp
+        self.Special = special
 
     @property
     def Defense(self):

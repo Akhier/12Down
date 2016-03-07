@@ -80,28 +80,6 @@ def Handle_Keys():
 
         else:
             key_char = chr(config.key.c)
-
-            # if key_char == 'g':
-            #     for object in config.objects:
-            #         if object.x == config.player.x and \
-            #            object.y == config.player.y and object.item:
-            #             object.item.pick_up()
-            #             break
-
-            # if key_char == 'i':
-            #     chosen_item = inventory_menu('Press the key next to an ' +
-            #                                  'item to use it, or any ' +
-            #                                  'other to cancel.\n')
-            #     if chosen_item is not None:
-            #         chosen_item.use()
-
-            # if key_char == 'd':
-            #     chosen_item = inventory_menu('Press the key next to an ' +
-            #                                  'to drop it, or any ' +
-            #                                  'other to cancel.\n')
-            #     if chosen_item is not None:
-            #         chosen_item.drop()
-
             if key_char == '>':
                 playercoord = CM.get_Component('Coord', config.PlayerId)
                 curlevel = config.CurrentDungeonLevel
@@ -114,6 +92,7 @@ def Handle_Keys():
                             key in tolevels and
                             key in leveldata.FeatureIds):
                         next_level()
+                        config.fov_recompute = True
                         break
             return 'no action'
 
@@ -123,6 +102,11 @@ def msgbox(text, width=50):
 
 
 def next_level():
+    if config.CurrentDungeonLevel > 0:
+        dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
+        dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+        for key in dungeonlevel.MonsterIds:
+            CM.cleanup(key)
     config.fov_recompute = True
     config.playscreen.clear
     config.CurrentDungeonLevel += 1

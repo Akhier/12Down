@@ -1,12 +1,14 @@
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
-from C_Flags import Level, ToLevel, Seen
 from Handle_Keys import next_level
 from C_Creature import Creature
 from C_Attack import Attack
 from Message import Message
 from C_Coord import Coord
+from C_Death import Death
+from C_Flags import Level
 from C_Tile import Tile
+from Menu import Menu
 import ECS_Storage
 import config
 import Color
@@ -21,11 +23,17 @@ def New_Game():
     config.game_msg = []
     config.game_state = 'playing'
     config.xptolevel = 66.6
+    CM.new_Component('ToLevel')
     CM.add_Component(config.PlayerId, 'Tile', Tile('Player', '@', False,
                                                    True, Color.sky))
     CM.add_Component(config.PlayerId, 'Coord',
                      Coord(config.playscreen_width / 2,
                            config.playscreen_height / 2))
+    deatheffects = [player_death]
+    CM.add_Component(config.PlayerId, 'Death',
+                     Death('You have died. What a pity.' +
+                           ' Did you even manage to get any loot?',
+                           '%', effects=deatheffects))
     CM.add_Component(config.PlayerId, 'Creature', Creature(10, 0, 10,
                                                            10, 7, 0))
     CM.add_Component(config.PlayerId, 'Level', Level())
@@ -37,14 +45,9 @@ def New_Game():
             ' kill you but atleast once finish there is an easy passage out!',
             Color.red)
 
-    # Temp code to make staircase to next level
-    stairs = EM.new_Id()
-    CM.add_Component(stairs, 'Tile', Tile('Stairs Down', '>', True,
-                                          True, Color.map_tile_visible))
-    CM.add_Component(stairs, 'Coord', Coord(config.playscreen_width / 2,
-                                            config.playscreen_height / 2))
-    CM.add_Component(stairs, 'ToLevel', ToLevel(2))
-    CM.add_Component(stairs, 'Seen', Seen())
-    dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-    firstlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
-    firstlevel.FeatureIds.append(stairs)
+
+def player_death(playerid):
+    choice = None
+    while choice is None:
+        choice = Menu('You have Died!', ['Exits to Main Menu'], 30)
+    config.game_state = 'finished'

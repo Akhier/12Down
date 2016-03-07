@@ -1,5 +1,7 @@
 from ComponentManager import ComponentManager as CM
+from S_CreateStairs import create_stairs
 from Message import Message
+from C_Flags import Seen
 import random
 import config
 import Color
@@ -24,13 +26,19 @@ def Attack_Creature(attackid, attackerid, defenderid):
     agimod = attacker.Agility - defender.Agility
     roll = random.randint(1, 20) + agimod
     if roll > 10:
-        damageroll = random.randint(attack.MinDamage,
-                                    attack.MaxDamage)
+        damageroll = 0
+        for i in range(attack.Dice):
+            damageroll = random.randint(1, attack.Sides)
         damage = int(damageroll * strmod)
         for i in range(defender.Defense):
             if damage > 0:
                 chance = random.randint(1, 100)
-                if chance <= 25:
+                percentchance = 25
+                if 'EnhancedDefense' in defender.Special:
+                    percentchance += defender.Special['EnhancedDefense']
+                if 'PierceDefense' in attacker.Special:
+                    percentchance -= attacker.Special['PierceDefense']
+                if chance <= percentchance:
                     damage -= 1
             if damage <= 0:
                 damage = 0
@@ -51,8 +59,20 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 Message('The ' + attackertile.TileName +
                         ' hits you but deals no damage!', color=Color.sky)
         if defender.CurHp <= 0:
-            Message('The ' + defendertile.TileName + ' Dies!',
-                    color=Color.darker_red)
+            dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
+            dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+            dungeonlevel.MonstersKilled += 1
+            if dungeonlevel.MonstersKilled >= 1 and \
+                    not dungeonlevel.StairsPresent:
+                dungeonlevel.StairsPresent = True
+                create_stairs(dungeonlevelid)
+            defenderdeath = CM.get_Component('Death', defenderid)
+            for effect in defenderdeath.Effects:
+                effect(defenderid)
+            if defenderid in dungeonlevel.MonsterIds:
+                dungeonlevel.MonsterIds.remove(defenderid)
+                dungeonlevel.FeatureIds.append(defenderid)
+                CM.add_Component(defenderid, 'Seen', Seen(seen=True))
     else:
         if attackerid == config.PlayerId:
             Message('You miss the ' + defendertile.TileName + '!')
@@ -66,6 +86,9 @@ def Attack_Creature(attackid, attackerid, defenderid):
 def Attack_Coord(attackid, attackerid, coordtoattack):
     coords = CM.dict_of('Coord')
     creatures = CM.dict_of('Creature')
+    idtoattacks = []
     for key, value in coords.iteritems():
         if value == coordtoattack and key in creatures:
-            Attack_Creature(attackid, attackerid, key)
+            idtoattacks.append(key)
+    for key in idtoattacks:
+        Attack_Creature(attackid, attackerid, key)

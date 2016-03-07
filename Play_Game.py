@@ -35,7 +35,7 @@ def Play_Game():
                 config.playscreen.write_ex(x, y, charmap[x][y],
                                            Color.map_tile_visible)
         config.player_action = Handle_Keys()
-        if config.player_action == 'exit':
+        if config.player_action == 'exit' or config.game_state == 'finished':
             #   Save game
             config.gamewindow.clear
             config.playscreen.clear
@@ -44,7 +44,8 @@ def Play_Game():
                 config.player_action != 'no action':
             actions = CM.dict_of('Action')
             for key in actions.iterkeys():
-                actions[key].take_turn()
+                if key in objectids:
+                    actions[key].take_turn()
 
 
 @property
