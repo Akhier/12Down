@@ -14,7 +14,7 @@ import Color
 def New_Game():
     EM.Id = []
     CM.Component = {}
-    config.DungeonLevelIds = []
+    config.DungeonLevelIds = {}
     config.CurrentDungeonLevel = 1
     config.PlayerId = EM.new_Id()
     config.PlayerAttack = EM.new_Id()
@@ -33,7 +33,7 @@ def New_Game():
     CM.add_Component(config.PlayerAttack, 'Attack', Attack(1, 4))
     firstlevelid = EM.new_Id()
     mapid = config.mapgen.create(firstlevelid)
-    config.DungeonLevelIds.append(firstlevelid)
+    config.DungeonLevelIds[config.CurrentDungeonLevel] = firstlevelid
     firstlevel = DungeonLevel(1, mapid)
     CM.add_Component(firstlevelid, 'DungeonLevel', firstlevel)
     Message('Welcome young adventurer! You have just entered my dungeon and' +

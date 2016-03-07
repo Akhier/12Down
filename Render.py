@@ -6,7 +6,7 @@ import Color
 
 
 def Render():
-    dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel - 1]
+    dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
     dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
     curmapid = dungeonlevel.MapId
     playercoord = CM.get_Component('Coord', config.PlayerId)

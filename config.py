@@ -5,7 +5,7 @@ from Panel import Panel
 import libtcodpy
 
 
-DungeonLevelIds = []
+DungeonLevelIds = {}
 CurrentDungeonLevel = 0
 PlayerId = False
 PlayerAttack = False

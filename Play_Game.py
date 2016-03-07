@@ -19,7 +19,7 @@ def Play_Game():
         Render()
         config.gamewindow.flush
         check_level_up
-        dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel - 1]
+        dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
         objectids = []
         objectids.extend(dungeonlevel.ItemIds)

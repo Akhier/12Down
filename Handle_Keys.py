@@ -1,6 +1,8 @@
 from ComponentManager import ComponentManager as CM
+from EntityManager import EntityManager as EM
 from Enum_Direction import Direction as Dir
 from S_MoveCreature import Walk_Direction
+from C_DungeonLevel import DungeonLevel
 from S_Combat import Attack_Coord
 from Menu import Menu
 import libtcodpy
@@ -75,8 +77,8 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_KP5:
             pass
 
-        # else:
-        #     key_char = chr(config.key.c)
+        else:
+            key_char = chr(config.key.c)
 
             # if key_char == 'g':
             #     for object in config.objects:
@@ -99,13 +101,32 @@ def Handle_Keys():
             #     if chosen_item is not None:
             #         chosen_item.drop()
 
-            # if key_char == '<':
-            #     if config.stairs.x == config.player.x and \
-            #             config.stairs.y == config.player.y:
-            #         next_level()
-
+            if key_char == '>':
+                playercoord = CM.get_Component('Coord', config.PlayerId)
+                curlevel = config.CurrentDungeonLevel
+                leveldata = CM.get_Component('DungeonLevel',
+                                             config.DungeonLevelIds[curlevel])
+                coords = CM.dict_of('Coord')
+                tolevels = CM.dict_of('ToLevel')
+                for key, value in coords.iteritems():
+                    if (value == playercoord and
+                            key in tolevels and
+                            key in leveldata.FeatureIds):
+                        next_level()
+                        break
             return 'didnt-take-turn'
 
 
 def msgbox(text, width=50):
     Menu(text, [], width)
+
+
+def next_level():
+    config.fov_recompute = True
+    config.playscreen.clear
+    config.CurrentDungeonLevel += 1
+    newlevelid = EM.new_Id()
+    config.DungeonLevelIds[config.CurrentDungeonLevel] = newlevelid
+    mapid = config.mapgen.create(newlevelid)
+    newlevel = DungeonLevel(config.CurrentDungeonLevel, mapid)
+    CM.add_Component(newlevelid, 'DungeonLevel', newlevel)

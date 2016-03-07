@@ -25,8 +25,10 @@ class MapGen:
         self.maxdepth = maxdepth
         self.usedtiles = []
         self.rooms = []
-        centerroom = _room(4, 5, 5, (int(self.width / 2),
-                                     int(self.height / 2)))
+        widthmod = random.randint(self.roomsize[0], self.roomsize[1])
+        heightmod = random.randint(self.roomsize[0], self.roomsize[1])
+        centerroom = _room(4, widthmod, heightmod,
+                           (int(self.width / 2), int(self.height / 2)))
         self.rooms.append(centerroom)
         self._set_used_tiles(centerroom)
         ring = [centerroom]
