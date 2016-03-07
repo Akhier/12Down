@@ -1,22 +1,22 @@
-Component = {}
+import ECS_Storage as S
 
 
 class ComponentManager:
 
     @classmethod
     def new_Component(self, componentname):
-        if componentname not in Component:
-            Component[componentname] = {}
+        if componentname not in S.Component:
+            S.Component[componentname] = {}
 
     @classmethod
     def dict_of(self, componentname):
-        return Component[componentname]
+        return S.Component[componentname]
 
     @classmethod
     def add_Component(self, Id, componentname, component):
-        if componentname not in Component:
+        if componentname not in S.Component:
             ComponentManager.new_Component(componentname)
-        Component[componentname][Id] = component
+        S.Component[componentname][Id] = component
 
     @classmethod
     def add_Components(self, Id, componentdict):
@@ -25,8 +25,8 @@ class ComponentManager:
 
     @classmethod
     def remove_Component(self, componentname, Id):
-        if Id in Component[componentname]:
-            del Component[componentname][Id]
+        if Id in S.Component[componentname]:
+            del S.Component[componentname][Id]
 
     @classmethod
     def remove_Components(self, componentnamelist, Id):
@@ -35,12 +35,12 @@ class ComponentManager:
 
     @classmethod
     def cleanup(self, Id):
-        for key in Component:
+        for key in S.Component:
             ComponentManager.remove_Component(key, Id)
 
     @classmethod
     def get_Component(self, componentname, Id):
-        return Component[componentname][Id]
+        return S.Component[componentname][Id]
 
     @classmethod
     def get_Components(self, componentname, Idlist):
@@ -52,7 +52,7 @@ class ComponentManager:
 
     @classmethod
     def check_Component(self, componentname, Id):
-        if Component[componentname][Id]:
+        if S.Component[componentname][Id]:
             return True
         else:
             return False

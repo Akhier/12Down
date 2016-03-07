@@ -1,7 +1,5 @@
 from uuid import uuid4
-
-
-Id = []
+import ECS_Storage as S
 
 
 class EntityManager:
@@ -9,9 +7,9 @@ class EntityManager:
     @classmethod
     def new_Id(self):
         nId = str(uuid4())
-        Id.append(nId)
+        S.Id.append(nId)
         return nId
 
     @classmethod
     def remove_Id(self, rId):
-        Id.remove(rId)
+        S.Id.remove(rId)

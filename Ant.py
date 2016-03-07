@@ -23,6 +23,18 @@ def make_ant(coord, dungeonlevel):
     dungeonlevel.MonsterIds.append(newmonsterid)
 
 
+def make_queen_ant(coord, dungeonlevel):
+    newmonsterid = EM.new_Id()
+    CM.add_Component(newmonsterid, 'Coord', coord)
+    CM.add_Component(newmonsterid, 'Tile',
+                     Tile('Queen Ant', 'A', False, True,
+                          color=Color.red))
+    CM.add_Component(newmonsterid, 'Creature',
+                     Creature(5, 10, 10, 5, 4, 7))
+    CM.add_Component(newmonsterid, 'Action', Ant_AI(newmonsterid))
+    dungeonlevel.MonsterIds.append(newmonsterid)
+
+
 class Ant_AI:
 
     def __init__(self, antid):

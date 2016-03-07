@@ -7,13 +7,13 @@ from C_Attack import Attack
 from Message import Message
 from C_Coord import Coord
 from C_Tile import Tile
+import ECS_Storage
 import config
 import Color
 
 
 def New_Game():
-    EM.Id = []
-    CM.Component = {}
+    ECS_Storage.init()
     config.DungeonLevelIds = {}
     config.PlayerId = EM.new_Id()
     config.PlayerAttack = EM.new_Id()
