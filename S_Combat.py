@@ -1,10 +1,12 @@
 from ComponentManager import ComponentManager as CM
 from S_CreateStairs import create_stairs
+import S_PlaceMonsters as PM
 from Message import Message
 from C_Flags import Seen
 import random
 import config
 import Color
+import Ant
 
 
 def Attack_Creature(attackid, attackerid, defenderid):
@@ -78,6 +80,11 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 create_stairs(dungeonlevelid)
                 Message('After having slayed many a monster the stairs have ' +
                         'magically appeared at the center!', color=Color.gold)
+            elif dungeonlevel.MonstersKilled == 5:
+                PM.Place_Boss(dungeonlevel, Ant.make_queen_ant)
+                Message('A strong presence can now be felt in the Dungeon',
+                        color=Color.light_purple)
+
     else:
         if attackerid == config.PlayerId:
             Message('You miss the ' + defendertile.TileName + '!')

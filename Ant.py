@@ -35,8 +35,8 @@ def make_queen_ant(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Coord', coord)
     CM.add_Component(newmonsterid, 'Tile',
                      Tile('Queen Ant', 'A', False, True,
-                          color=Color.white))
-    deatheffects = [queens_choice, death_cleanup]
+                          color=Color.silver))
+    deatheffects = [death_cleanup, queens_choice]
     CM.add_Component(newmonsterid, 'Death',
                      Death('The Ant Queen shudders and slumps over now dead.' +
                            ' The once majestic creature now pitiful.',
@@ -64,11 +64,12 @@ def queens_choice(queenid):
         playerattack = CM.get_Component('Attack', config.PlayerAttack)
         playerattack.Dice = 2
         playerattack.Sides = 4
-        playerattack.Special['PierceDefense'] = 5
+        playerattack.Special['PierceDefense'] = 10
         Message('Maybe having 2 sharp daggers will up your damager?')
     if choice == 2:
         playercreature.BaseAgility += 1
         playercreature.VisionRange += 1
+        config.fov_recompute = True
         Message('The strange glow streams into your eyes. After the shock ' +
                 'wears of you notice you can see better')
 

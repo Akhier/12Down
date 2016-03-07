@@ -1,8 +1,8 @@
 from ComponentManager import ComponentManager as CM
 from C_Coord import Coord
-from Ant import make_ant
 import config
 import random
+import Ant
 
 
 def Place_Monsters_On_Level(dungeonlevelid):
@@ -16,13 +16,73 @@ def Place_Monsters_On_Level(dungeonlevelid):
         if x < curmap.Width / 2 - 4 or x > curmap.Width / 2 + 4 or \
                 y < curmap.Height / 2 - 4 or y > curmap.Height / 2 + 4:
             testcoord = Coord(x, y)
-            coords = CM.dict_of('Coord')
-            tiles = CM.dict_of('Tile')
-            freetoplace = True
-            for key, value in coords.iteritems():
-                if testcoord == value and key in tiles:
-                    if not tiles[key].Passable:
-                        freetoplace = False
-            if freetoplace:
-                make_ant(testcoord, dungeonlevel)
+            if Try_Place(testcoord, dungeonlevel, Ant.make_ant):
                 placed_monsters += 1
+                placed_in_relation = 0
+                while Place_in_Relation(testcoord, dungeonlevel,
+                                        Ant.make_ant) and \
+                        placed_in_relation <= config.monster_per_level * .25:
+                    placed_monsters += 1
+                    placed_in_relation += 1
+
+
+def Place_in_Relation(sourcecoord, dungeonlevel, monster,
+                      maxoffset=5, minoffset=3):
+    goodoffset = False
+    while not goodoffset:
+        xoffset = random.randint(-maxoffset, maxoffset)
+        yoffset = random.randint(-maxoffset, maxoffset)
+        if minoffset > 0:
+            if (xoffset >= minoffset or xoffset <= -minoffset) and \
+                    (yoffset >= minoffset or yoffset <= -minoffset):
+                goodoffset = True
+        else:
+            goodoffset = True
+    targetcoord = Coord(sourcecoord.X + xoffset, sourcecoord.Y + yoffset)
+    return Try_Place(targetcoord, dungeonlevel, monster)
+
+
+def Place_Boss(dungeonlevel, monster):
+    playercoord = CM.get_Component('Coord', config.PlayerId)
+    sourcex = -playercoord.X
+    if sourcex > config.playscreen_width * .25 and \
+            sourcex < config.playscreen_width * .75:
+        if sourcex < config.playscreen_width * .5:
+            sourcex -= int(config.playscreen_width * .25)
+        else:
+            sourcex += int(config.playscreen_width * .25)
+    sourcey = -playercoord.Y
+    if sourcey > config.playscreen_height * .25 and \
+            sourcey < config.playscreen_height * .75:
+        if sourcey < config.playscreen_height * .5:
+            sourcey -= int(config.playscreen_height * .25)
+        else:
+            sourcey += int(config.playscreen_height * .25)
+    sourcecoord = Coord(sourcex, sourcey)
+    if not Try_Place(sourcecoord, dungeonlevel, monster):
+        failure_in_Relation = 0
+        maxoffset = 5
+        while not Place_in_Relation(sourcecoord, dungeonlevel, monster,
+                                    maxoffset=maxoffset, minoffset=0):
+            failure_in_Relation += 1
+            if failure_in_Relation > maxoffset * 10:
+                maxoffset += 1
+                failure_in_Relation = 0
+
+
+def Try_Place(targetcoord, dungeonlevel, monster):
+    if targetcoord.X > 0 and targetcoord.X < config.playscreen_width and \
+            targetcoord.Y > 0 and targetcoord.Y < config.playscreen_height:
+        coords = CM.dict_of('Coord')
+        tiles = CM.dict_of('Tile')
+        freetoplace = True
+        for key, value in coords.iteritems():
+            if targetcoord == value and key in tiles:
+                if not tiles[key].Passable:
+                    freetoplace = False
+        if freetoplace:
+            monster(targetcoord, dungeonlevel)
+            return True
+        return False
+    else:
+        return False
