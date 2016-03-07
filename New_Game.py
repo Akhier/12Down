@@ -1,11 +1,11 @@
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
+from C_Flags import Level, ToLevel, Seen
 from C_DungeonLevel import DungeonLevel
 from C_Creature import Creature
 from C_Attack import Attack
 from Message import Message
 from C_Coord import Coord
-from C_Flags import Level
 from C_Tile import Tile
 import config
 import Color
@@ -41,3 +41,13 @@ def New_Game():
             ' first 26 levels! Though of course everything will still try to' +
             ' kill you but atleast once finish there is an easy passage out!',
             Color.red)
+
+    # Temp code to make staircase to next level
+    stairs = EM.new_Id()
+    CM.add_Component(stairs, 'Tile', Tile('Stairs Down', '>', True,
+                                          True, Color.map_tile_visible))
+    CM.add_Component(stairs, 'Coord', Coord(config.playscreen_width / 2,
+                                            config.playscreen_height / 2))
+    CM.add_Component(stairs, 'ToLevel', ToLevel(2))
+    CM.add_Component(stairs, 'Seen', Seen())
+    firstlevel.FeatureIds.append(stairs)

@@ -38,6 +38,7 @@ def Play_Game():
         if config.player_action == 'exit':
             #   Save game
             config.gamewindow.clear
+            config.playscreen.clear
             break
         if config.player_action == 'playing' and \
                 config.player_action != 'no action':
