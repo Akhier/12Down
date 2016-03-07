@@ -39,7 +39,7 @@ def Render():
         if config.visible[coord.X][coord.Y]:
             item = CM.get_Component('Tile', itemid)
             config.playscreen.write_ex(x, y, item.Char, item.Color)
-            s = True
+            s.seen = True
         elif s.seen:
             config.playscreen.write_ex(x, y, '~', Color.map_tile_seen)
     for featureid in dungeonlevel.FeatureIds:
@@ -50,7 +50,7 @@ def Render():
         if config.visible[coord.X][coord.Y] or s.seen:
             feature = CM.get_Component('Tile', featureid)
             config.playscreen.write_ex(x, y, feature.Char, feature.Color)
-            s = True
+            s.seen = True
     for monsterid in dungeonlevel.MonsterIds:
         coord = CM.get_Component('Coord', monsterid)
         x = coord.X
