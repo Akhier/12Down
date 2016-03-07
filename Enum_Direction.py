@@ -10,3 +10,4 @@ class Direction():
     NE = Coord(1, -1)
     SW = Coord(-1, 1)
     SE = Coord(1, 1)
+    C = Coord(0, 0)

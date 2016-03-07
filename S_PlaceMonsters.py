@@ -1,11 +1,8 @@
 from ComponentManager import ComponentManager as CM
-from EntityManager import EntityManager as EM
-from C_Creature import Creature
 from C_Coord import Coord
-from C_Tile import Tile
+from Ant import make_ant
 import config
 import random
-import Color
 
 
 def Place_Monsters_On_Level(dungeonlevelid):
@@ -25,12 +22,5 @@ def Place_Monsters_On_Level(dungeonlevelid):
                 if not tiles[key].Passable:
                     freetoplace = False
         if freetoplace:
-            newmonsterid = EM.new_Id()
-            CM.add_Component(newmonsterid, 'Coord', testcoord)
-            CM.add_Component(newmonsterid, 'Tile',
-                             Tile('Ant', 'a', False, True,
-                                  color=Color.darker_red))
-            CM.add_Component(newmonsterid, 'Creature',
-                             Creature(1, 10, 10, 5, 5, 7))
-            dungeonlevel.MonsterIds.append(newmonsterid)
+            make_ant(testcoord, dungeonlevel)
             placed_monsters += 1

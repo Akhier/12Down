@@ -115,7 +115,7 @@ def Handle_Keys():
                             key in leveldata.FeatureIds):
                         next_level()
                         break
-            return 'didnt-take-turn'
+            return 'no action'
 
 
 def msgbox(text, width=50):

@@ -40,9 +40,11 @@ def Play_Game():
             config.gamewindow.clear
             config.playscreen.clear
             break
-        if config.player_action == 'playing' and \
+        if config.game_state == 'playing' and \
                 config.player_action != 'no action':
-            pass   # Everything else takes their turns
+            actions = CM.dict_of('Action')
+            for key in actions.iterkeys():
+                actions[key].take_turn()
 
 
 @property
