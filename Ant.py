@@ -23,7 +23,7 @@ def make_ant(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Death',
                      Death('The ants shell now smashed gives way ' +
                            'as it breaths it\'s final breath',
-                           '%', effects=[death_cleanup]))
+                           '~', effects=[death_cleanup]))
     CM.add_Component(newmonsterid, 'Creature',
                      Creature(1, 10, 10, 5, 5, 7))
     CM.add_Component(newmonsterid, 'Action', Ant_AI(newmonsterid))
@@ -40,7 +40,7 @@ def make_queen_ant(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Death',
                      Death('The Ant Queen shudders and slumps over now dead.' +
                            ' The once majestic creature now pitiful.',
-                           '%', effects=deatheffects))
+                           '~', effects=deatheffects))
     CM.add_Component(newmonsterid, 'Creature',
                      Creature(5, 10, 10, 5, 4, 7))
     CM.add_Component(newmonsterid, 'Action', Ant_AI(newmonsterid))

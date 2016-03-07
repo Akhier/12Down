@@ -41,7 +41,7 @@ def Render():
             config.playscreen.write_ex(x, y, item.Char, item.Color)
             s.seen = True
         elif s.seen:
-            config.playscreen.write_ex(x, y, '~', Color.map_tile_seen)
+            config.playscreen.write_ex(x, y, '?', Color.map_tile_seen)
     for featureid in dungeonlevel.FeatureIds:
         coord = CM.get_Component('Coord', featureid)
         x = coord.X
