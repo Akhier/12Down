@@ -9,6 +9,7 @@ DungeonLevelIds = {}
 CurrentDungeonLevel = 0
 PlayerId = False
 PlayerAttack = False
+PlayerName = ''
 game_msgs = []
 window_width = 80
 window_height = 50

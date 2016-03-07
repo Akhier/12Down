@@ -8,13 +8,16 @@ from C_Coord import Coord
 from C_Death import Death
 from C_Flags import Level
 from C_Tile import Tile
+from Panel import Panel
 from Menu import Menu
 import ECS_Storage
+import libtcodpy
 import config
 import Color
 
 
 def New_Game():
+    get_name()
     ECS_Storage.init()
     config.DungeonLevelIds = {}
     config.CurrentDungeonLevel = 0
@@ -52,3 +55,34 @@ def player_death(playerid):
     while choice is None:
         choice = Menu('You have Died!', ['Exits to Main Menu'], 30)
     config.game_state = 'finished'
+
+
+def get_name():
+    name = ''
+    namepanel = Panel(0, 0, config.window_width, config.window_height)
+    while True:
+        namepanel.clear
+        config.gamewindow.clear
+        namepanel.write(config.window_width / 2 - 10,
+                        int(config.window_height * .2),
+                        'Please Enter a Name!')
+        namepanel.write(config.window_width / 2 - len(name) / 2 - 2,
+                        int(config.window_height * .3),
+                        '( ' + name + ' )')
+        namepanel.blit()
+        config.gamewindow.flush
+        key = libtcodpy.console_wait_for_keypress(True)
+        if key.vk == libtcodpy.KEY_BACKSPACE and len(name) > 0:
+            name = name[:-1]
+        elif key.vk == libtcodpy.KEY_ENTER and len(name) > 0:
+            option = None
+            while option is None:
+                option = Menu('Is ' + name + ' the name you want?',
+                              ['Yes', 'No'], 20)
+            if option == 0:
+                break
+        else:
+            if key.c != 0:
+                key_char = chr(key.c)
+                name += key_char
+    config.PlayerName = name
