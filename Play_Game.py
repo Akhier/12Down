@@ -36,10 +36,14 @@ def Play_Game():
                                            Color.map_tile_visible)
         config.player_action = Handle_Keys()
         if config.player_action == 'exit' or config.game_state == 'finished':
-            #   Save game
-            config.gamewindow.clear
-            config.playscreen.clear
-            break
+            choice = None
+            while choice is None:
+                choice = Menu('Are you sure you want to Quit?',
+                              ['Yes I want to quit', 'No'], 34)
+            if choice == 0:
+                config.gamewindow.clear
+                config.playscreen.clear
+                break
         if config.game_state == 'playing' and \
                 config.player_action != 'no action':
             actions = CM.dict_of('Action')
