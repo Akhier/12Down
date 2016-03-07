@@ -17,6 +17,7 @@ import Color
 def New_Game():
     ECS_Storage.init()
     config.DungeonLevelIds = {}
+    config.CurrentDungeonLevel = 0
     config.PlayerId = EM.new_Id()
     config.PlayerAttack = EM.new_Id()
     config.fov_recompute = True

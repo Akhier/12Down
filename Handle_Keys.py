@@ -105,8 +105,12 @@ def next_level():
     if config.CurrentDungeonLevel > 0:
         dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+        levelmap = CM.get_Component('Map', dungeonlevel.MapId)
         for key in dungeonlevel.MonsterIds:
             CM.cleanup(key)
+        for lst in levelmap.TileIds:
+            for key in lst:
+                CM.cleanup(key)
     config.fov_recompute = True
     config.playscreen.clear
     config.CurrentDungeonLevel += 1

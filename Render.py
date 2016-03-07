@@ -84,6 +84,6 @@ def render_bar(x, y, total_width, name, value, maximum, bar_color, back_color):
         config.statscreen.rect(x, y, bar_width, 1, False,
                                flag=libtcodpy.BKGND_SET)
     config.statscreen.set_default_foreground(Color.white)
-    config.statscreen.write(x + total_width / 2, y, name + ': ' +
-                            str(value) + '/' + str(maximum),
+    config.statscreen.write(x + total_width / 2, y, ' ' + name + ': ' +
+                            str(value) + '/' + str(maximum) + ' ',
                             align=config.CENTER)

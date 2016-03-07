@@ -18,7 +18,7 @@ def Play_Game():
                                       config.key, config.mouse)
         Render()
         config.gamewindow.flush
-        check_level_up
+        check_level_up()
         dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
         objectids = []
@@ -48,14 +48,14 @@ def Play_Game():
                     actions[key].take_turn()
 
 
-@property
 def check_level_up():
     level_up_xp = int(config.xptolevel * config.xpscale)
     playercreature = CM.get_Component('Creature', config.PlayerId)
     if playercreature.Xp >= level_up_xp:
-        playercreature.Xp = 0
+        playercreature.CurHp = playercreature.MaxHp
+        playercreature.Xp = level_up_xp - playercreature.Xp
         playerlevel = CM.get_Component('Level', config.PlayerId)
-        playerlevel += 1
+        playerlevel.level += 1
         config.xptolevel = level_up_xp
         choice = None
         options = ['+2hp, +1Def, +1Str, +1Agi',

@@ -30,6 +30,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
         for i in range(attack.Dice):
             damageroll = random.randint(1, attack.Sides)
         damage = int(damageroll * strmod)
+        if damage < 1:
+            damage = 1
         for i in range(defender.Defense):
             if damage > 0:
                 chance = random.randint(1, 100)
@@ -59,13 +61,10 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 Message('The ' + attackertile.TileName +
                         ' hits you but deals no damage!', color=Color.sky)
         if defender.CurHp <= 0:
+            attacker.Xp += defender.Xp
             dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
             dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
             dungeonlevel.MonstersKilled += 1
-            if dungeonlevel.MonstersKilled >= 1 and \
-                    not dungeonlevel.StairsPresent:
-                dungeonlevel.StairsPresent = True
-                create_stairs(dungeonlevelid)
             defenderdeath = CM.get_Component('Death', defenderid)
             for effect in defenderdeath.Effects:
                 effect(defenderid)
@@ -73,6 +72,12 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 dungeonlevel.MonsterIds.remove(defenderid)
                 dungeonlevel.FeatureIds.append(defenderid)
                 CM.add_Component(defenderid, 'Seen', Seen(seen=True))
+            if dungeonlevel.MonstersKilled >= 10 and \
+                    not dungeonlevel.StairsPresent:
+                dungeonlevel.StairsPresent = True
+                create_stairs(dungeonlevelid)
+                Message('After having slayed many a monster the stairs have ' +
+                        'magically appeared at the center!', color=Color.gold)
     else:
         if attackerid == config.PlayerId:
             Message('You miss the ' + defendertile.TileName + '!')
