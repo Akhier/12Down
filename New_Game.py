@@ -1,7 +1,7 @@
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Flags import Level, ToLevel, Seen
-from C_DungeonLevel import DungeonLevel
+from Handle_Keys import next_level
 from C_Creature import Creature
 from C_Attack import Attack
 from Message import Message
@@ -15,7 +15,6 @@ def New_Game():
     EM.Id = []
     CM.Component = {}
     config.DungeonLevelIds = {}
-    config.CurrentDungeonLevel = 1
     config.PlayerId = EM.new_Id()
     config.PlayerAttack = EM.new_Id()
     config.fov_recompute = True
@@ -31,11 +30,7 @@ def New_Game():
                                                            10, 7, 0))
     CM.add_Component(config.PlayerId, 'Level', Level())
     CM.add_Component(config.PlayerAttack, 'Attack', Attack(1, 4))
-    firstlevelid = EM.new_Id()
-    mapid = config.mapgen.create(firstlevelid)
-    config.DungeonLevelIds[config.CurrentDungeonLevel] = firstlevelid
-    firstlevel = DungeonLevel(1, mapid)
-    CM.add_Component(firstlevelid, 'DungeonLevel', firstlevel)
+    next_level()
     Message('Welcome young adventurer! You have just entered my dungeon and' +
             ' through my deal with the adventurers guild you may explore my' +
             ' first 26 levels! Though of course everything will still try to' +
@@ -50,4 +45,6 @@ def New_Game():
                                             config.playscreen_height / 2))
     CM.add_Component(stairs, 'ToLevel', ToLevel(2))
     CM.add_Component(stairs, 'Seen', Seen())
+    dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
+    firstlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
     firstlevel.FeatureIds.append(stairs)

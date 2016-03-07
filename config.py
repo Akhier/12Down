@@ -50,3 +50,4 @@ key = False
 CENTER = libtcodpy.CENTER
 LEFT = libtcodpy.LEFT
 RIGHT = libtcodpy.RIGHT
+monster_per_level = 20

@@ -1,4 +1,5 @@
 from ComponentManager import ComponentManager as CM
+from S_PlaceMonsters import Place_Monsters_On_Level
 from EntityManager import EntityManager as EM
 from Enum_Direction import Direction as Dir
 from S_MoveCreature import Walk_Direction
@@ -130,3 +131,4 @@ def next_level():
     mapid = config.mapgen.create(newlevelid)
     newlevel = DungeonLevel(config.CurrentDungeonLevel, mapid)
     CM.add_Component(newlevelid, 'DungeonLevel', newlevel)
+    Place_Monsters_On_Level(newlevelid)
