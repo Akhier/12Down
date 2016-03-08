@@ -64,9 +64,9 @@ def get_name():
     while True:
         namepanel.clear
         config.gamewindow.clear
-        namepanel.write(config.window_width / 2 - 10,
+        namepanel.write(config.window_width / 2 - 21,
                         int(config.window_height * .2),
-                        'Please Enter a Name!')
+                        'Please Enter a Name! (ten character limit)')
         namepanel.write(config.window_width / 2 - len(name) / 2 - 2,
                         int(config.window_height * .3),
                         '( ' + name + ' )')
@@ -83,7 +83,8 @@ def get_name():
             if option == 0:
                 break
         else:
-            if key.c != 0:
-                key_char = chr(key.c)
-                name += key_char
+            if len(name) < 10:
+                if key.c != 0:
+                    key_char = chr(key.c)
+                    name += key_char
     config.PlayerName = name

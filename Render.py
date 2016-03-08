@@ -13,6 +13,7 @@ def Render():
     playercreature = CM.get_Component('Creature', config.PlayerId)
     playertile = CM.get_Component('Tile', config.PlayerId)
     playerlevel = CM.get_Component('Level', config.PlayerId)
+    playerattack = CM.get_Component('Attack', config.PlayerAttack)
     if config.fov_recompute:
         config.fov_recompute = False
         curmap = CM.get_Component('Map', curmapid)
@@ -82,7 +83,15 @@ def Render():
                playercreature.Xp, int(config.xptolevel * config.xpscale),
                Color.green, Color.darker_green)
     config.statscreen.write_wrap(2, 4, config.statscreen_width - 4, 2,
-                                 config.PlayerName)
+                                 'Name: ' + config.PlayerName)
+    config.statscreen.write(2, 6, 'Def: ' +
+                            str(playercreature.Defense) + '   ')
+    config.statscreen.write(2, 8, 'Str: ' +
+                            str(playercreature.Strength) + '   ')
+    config.statscreen.write(2, 10, 'Agi: ' +
+                            str(playercreature.Agility) + '   ')
+    config.statscreen.write(2, 12, 'Atk: ' + str(playerattack.Dice) +
+                            'd' + str(playerattack.Sides) + '   ')
     config.playscreen.blit()
     config.messagescreen.blit()
     config.statscreen.blit()
