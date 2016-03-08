@@ -3,6 +3,11 @@ from C_Coord import Coord
 import config
 import random
 import Ant
+import Bat
+
+
+monsters = {1: Ant.make_ant, 2: Bat.make_bat}
+bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat}
 
 
 def Place_Monsters_On_Level(dungeonlevelid):
@@ -11,16 +16,23 @@ def Place_Monsters_On_Level(dungeonlevelid):
     random.seed(curmap.Seed)
     placed_monsters = 0
     while placed_monsters <= config.monster_per_level:
+        if dungeonlevel.Level == 1:
+            monster = monsters[1]
+        elif dungeonlevel.Level == 2:
+            if random.randint(1, 10) == 1:
+                monster = monsters[1]
+            else:
+                monster = monsters[2]
         x = random.randint(1, curmap.Width - 1)
         y = random.randint(1, curmap.Height - 1)
         if x < curmap.Width / 2 - 4 or x > curmap.Width / 2 + 4 or \
                 y < curmap.Height / 2 - 4 or y > curmap.Height / 2 + 4:
             testcoord = Coord(x, y)
-            if Try_Place(testcoord, dungeonlevel, Ant.make_ant):
+            if Try_Place(testcoord, dungeonlevel, monster):
                 placed_monsters += 1
                 placed_in_relation = 0
                 while Place_in_Relation(testcoord, dungeonlevel,
-                                        Ant.make_ant) and \
+                                        monster) and \
                         placed_in_relation <= config.monster_per_level * .25:
                     placed_monsters += 1
                     placed_in_relation += 1
@@ -42,7 +54,8 @@ def Place_in_Relation(sourcecoord, dungeonlevel, monster,
     return Try_Place(targetcoord, dungeonlevel, monster)
 
 
-def Place_Boss(dungeonlevel, monster):
+def Place_Boss(dungeonlevel):
+    monster = bossmonsters[dungeonlevel.Level]
     playercoord = CM.get_Component('Coord', config.PlayerId)
     sourcex = -playercoord.X
     if sourcex > config.playscreen_width * .25 and \

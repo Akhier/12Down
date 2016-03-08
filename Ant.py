@@ -1,5 +1,3 @@
-from S_MoveCreature import Walk_Direction, Get_Direction_To, \
-    Get_Alt_Direction_To
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
@@ -7,6 +5,7 @@ from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack
 from Message import Message
+import S_MoveCreature as MC
 from C_Tile import Tile
 from math import hypot
 from Menu import Menu
@@ -91,8 +90,8 @@ class Ant_AI:
             if int(disttoplayer) <= 1:
                 Attack_Coord(self.BasicAttackId, self.AntId, playercoord)
             else:
-                direction = Get_Direction_To(antcoord, playercoord)
-                if not Walk_Direction(self.AntId, direction):
-                    directions = Get_Alt_Direction_To(direction)
-                    if not Walk_Direction(self.AntId, directions[0]):
-                        Walk_Direction(self.AntId, directions[1])
+                direction = MC.Get_Direction_To(antcoord, playercoord)
+                if not MC.Walk_Direction(self.AntId, direction):
+                    directions = MC.Get_Alt_Direction_To(direction)
+                    if not MC.Walk_Direction(self.AntId, directions[0]):
+                        MC.Walk_Direction(self.AntId, directions[1])

@@ -3,6 +3,9 @@ import libtcodpy
 
 light_red = libtcodpy.light_red
 darker_red = libtcodpy.darker_red
+gray = libtcodpy.gray
+dark_gray = libtcodpy.dark_gray
+yellow = libtcodpy.yellow
 white = libtcodpy.white
 red = libtcodpy.red
 sky = libtcodpy.sky

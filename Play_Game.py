@@ -35,12 +35,18 @@ def Play_Game():
                 config.playscreen.write_ex(x, y, charmap[x][y],
                                            Color.map_tile_visible)
         config.player_action = Handle_Keys()
-        if config.player_action == 'exit' or config.game_state == 'finished':
-            choice = None
-            while choice is None:
-                choice = Menu('Are you sure you want to Quit?',
-                              ['Yes I want to quit', 'No'], 34)
-            if choice == 0:
+        if config.player_action == 'exit' or \
+                config.game_state == 'finished':
+            if config.player_action == 'exit':
+                choice = None
+                while choice is None:
+                    choice = Menu('Are you sure you want to Quit?',
+                                  ['Yes I want to quit', 'No'], 34)
+                if choice == 0:
+                    config.gamewindow.clear
+                    config.playscreen.clear
+                    break
+            else:
                 config.gamewindow.clear
                 config.playscreen.clear
                 break

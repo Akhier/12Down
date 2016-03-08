@@ -81,3 +81,22 @@ def Get_Alt_Direction_To(direction):
         d = [Direction.S, Direction.E]
         shuffle(d)
         return d
+
+
+def Get_Opposite_Direction(direction):
+    if direction == Direction.N:
+        return Direction.S
+    elif direction == Direction.S:
+        return Direction.N
+    elif direction == Direction.W:
+        return Direction.E
+    elif direction == Direction.E:
+        return Direction.W
+    elif direction == Direction.NW:
+        return Direction.SE
+    elif direction == Direction.NE:
+        return Direction.SW
+    elif direction == Direction.SW:
+        return Direction.NE
+    elif direction == Direction.SE:
+        return Direction.NW

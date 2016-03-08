@@ -1,12 +1,12 @@
 from ComponentManager import ComponentManager as CM
 from S_CreateStairs import create_stairs
 import S_PlaceMonsters as PM
+import S_MoveCreature as MC
 from Message import Message
 from C_Flags import Seen
 import random
 import config
 import Color
-import Ant
 
 
 def Attack_Creature(attackid, attackerid, defenderid):
@@ -15,6 +15,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
     defender = CM.get_Component('Creature', defenderid)
     attackertile = CM.get_Component('Tile', attackerid)
     defendertile = CM.get_Component('Tile', defenderid)
+    attackercoord = CM.get_Component('Coord', attackerid)
+    defendercoord = CM.get_Component('Coord', defenderid)
     tempstr = int(attacker.Strength)
     tempnum = 0
     strmod = 0.0
@@ -27,7 +29,17 @@ def Attack_Creature(attackid, attackerid, defenderid):
         tempstr = tempstr - 10
     agimod = attacker.Agility - defender.Agility
     roll = random.randint(1, 20) + agimod
-    if roll > 10:
+    dodge = False
+    if roll > 10 and 'Dodge' in defender.Special:
+        dodgechance = defender.Special['Dodge']
+        chance = random.randint(1, 100)
+        if chance <= dodgechance:
+            direction = MC.Get_Direction_To(attackercoord, defendercoord)
+            dodge = MC.Walk_Direction(defenderid, direction)
+            if dodge:
+                Message('You dodge the ' + attacker.TileName + '\'s attack!',
+                        color=Color.yellow)
+    if roll > 10 and not dodge:
         damageroll = 0
         for i in range(attack.Dice):
             damageroll = random.randint(1, attack.Sides)
@@ -48,6 +60,12 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 damage = 0
                 break
         defender.CurHp -= damage
+        if damage > 0 and 'LifeDrain' in attack.Special:
+            drain = attack.Special['LifeDrain']
+            if drain < damage:
+                attacker.CurHp += drain
+            else:
+                attacker.CurHp += damage
         if attackerid == config.PlayerId:
             if damage > 0:
                 Message('You hit the ' + defendertile.TileName + ' for ' +
@@ -61,7 +79,7 @@ def Attack_Creature(attackid, attackerid, defenderid):
                         str(damage) + '!', color=Color.red)
             else:
                 Message('The ' + attackertile.TileName +
-                        ' hits you but deals no damage!', color=Color.sky)
+                        ' hits you but deals no damage!', color=Color.yellow)
         if defender.CurHp <= 0:
             attacker.Xp += defender.Xp
             dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
@@ -81,7 +99,7 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 Message('After having slayed many a monster the stairs have ' +
                         'magically appeared at the center!', color=Color.gold)
             elif dungeonlevel.MonstersKilled == 5:
-                PM.Place_Boss(dungeonlevel, Ant.make_queen_ant)
+                PM.Place_Boss(dungeonlevel)
                 Message('A strong presence can now be felt in the Dungeon',
                         color=Color.light_purple)
 
