@@ -20,7 +20,7 @@ def make_dog(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Coord', coord)
     CM.add_Component(newmonsterid, 'Tile',
                      Tile('Dog', 'd', False, True,
-                          color=Color.brown))
+                          color=Color.darker_yellow))
     CM.add_Component(newmonsterid, 'Death',
                      Death('The little doggie wimpers as it falls over.',
                            '~', effects=[death_cleanup]))
@@ -35,7 +35,7 @@ def make_rabid_dog(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Coord', coord)
     CM.add_Component(newmonsterid, 'Tile',
                      Tile('Rabid Dog', 'D', False, True,
-                          color=Color.light_brown))
+                          color=Color.dark_yellow))
     deatheffects = [death_cleanup, rabid_choice]
     CM.add_Component(newmonsterid, 'Death',
                      Death('The Rabid Dog foams at the mouth then slumps ' +
@@ -72,11 +72,7 @@ def rabid_choice(twintailid):
         Message('They do make a nice necklace. ' +
                 'For some reason this makes you feel better defended!')
     if choice == 2:
-        playercreature.MaxHp += 2
-        playercreature.BaseDefense += 1
-        playercreature.BaseStrength += 1
-        playercreature.BaseAgility += 1
-        playercreature.Xp += 200
+        playercreature.Xp += 500
         Message('Sometimes wisdom comes from experiance. ' +
                 'In this case it is the reverse.')
 
