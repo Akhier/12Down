@@ -53,7 +53,8 @@ def Play_Game():
         if config.game_state == 'playing' and \
                 config.player_action != 'no action':
             actions = CM.dict_of('Action')
-            for key in actions.iterkeys():
+            actions.keys()
+            for key in actions:
                 if key in objectids:
                     actions[key].take_turn()
 
@@ -64,7 +65,7 @@ def check_level_up():
     if playercreature.Xp >= level_up_xp:
         if playercreature.CurHp < playercreature.MaxHp:
             playercreature.CurHp = playercreature.MaxHp
-        playercreature.Xp = level_up_xp - playercreature.Xp
+        playercreature.Xp = playercreature.Xp - level_up_xp
         playerlevel = CM.get_Component('Level', config.PlayerId)
         playerlevel.level += 1
         config.xptolevel = level_up_xp
@@ -84,7 +85,7 @@ def check_level_up():
         if playercreature.BaseAgility > 3:
             options.append('-3Agi then +9Str')
             sagi = True
-        while choice is None:   # HP Defense Strength Agility
+        while choice is None:
             choice = Menu('Level Up! Choose how you would like' +
                           'to increase your stats.', options,
                           config.messagescreen_width)

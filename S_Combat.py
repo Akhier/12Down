@@ -38,11 +38,11 @@ def Attack_Creature(attackid, attackerid, defenderid):
             dodge = MC.Walk_Direction(defenderid, direction)
             if dodge:
                 if defenderid == config.PlayerId:
-                    Message('You dodge the ' + attacker.TileName +
+                    Message('You dodge the ' + attackertile.TileName +
                             '\'s attack!',
                             color=Color.yellow)
                 else:
-                    Message('The ' + defender.TileName +
+                    Message('The ' + defendertile.TileName +
                             ' dodges your attack!',
                             color=Color.light_red)
     if roll > 10 and not dodge:

@@ -58,6 +58,7 @@ def player_death(playerid):
 
 
 def get_name():
+    config.PlayerName = ''
     name = ''
     namepanel = Panel(0, 0, config.window_width, config.window_height)
     while True:

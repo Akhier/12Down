@@ -1,8 +1,12 @@
 import libtcodpy
 
 
+lighter_red = libtcodpy.lighter_red
 light_red = libtcodpy.light_red
 darker_red = libtcodpy.darker_red
+light_green = libtcodpy.light_green
+green = libtcodpy.green
+darker_green = libtcodpy.darker_green
 gray = libtcodpy.gray
 dark_gray = libtcodpy.dark_gray
 yellow = libtcodpy.yellow

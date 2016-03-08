@@ -12,6 +12,7 @@ def Render():
     playercoord = CM.get_Component('Coord', config.PlayerId)
     playercreature = CM.get_Component('Creature', config.PlayerId)
     playertile = CM.get_Component('Tile', config.PlayerId)
+    playerlevel = CM.get_Component('Level', config.PlayerId)
     if config.fov_recompute:
         config.fov_recompute = False
         curmap = CM.get_Component('Map', curmapid)
@@ -67,23 +68,41 @@ def Render():
         config.messagescreen.write(1, y, line)
         config.messagescreen.set_default_foreground(Color.white)
         y += 1
-    render_bar(2, 2, config.statscreen_width - 4, 'HP', playercreature.CurHp,
-               playercreature.MaxHp, Color.light_red, Color.darker_red)
+    if playercreature.CurHp < playercreature.MaxHp:
+        render_bar(2, 2, config.statscreen_width - 4, 'HP',
+                   playercreature.CurHp, playercreature.MaxHp,
+                   Color.light_red, Color.darker_red)
+    else:
+        render_bar(2, 2, config.statscreen_width - 4, 'HP',
+                   playercreature.CurHp - playercreature.MaxHp,
+                   playercreature.MaxHp, Color.lighter_red,
+                   Color.light_red, overflow=True)
+    render_bar(2, config.statscreen_height - 3,
+               config.statscreen_width - 4, 'LV ' + str(playerlevel.level),
+               playercreature.Xp, int(config.xptolevel * config.xpscale),
+               Color.green, Color.darker_green)
+    config.statscreen.write_wrap(2, 4, config.statscreen_width - 4, 2,
+                                 config.PlayerName)
     config.playscreen.blit()
     config.messagescreen.blit()
     config.statscreen.blit()
 
 
-def render_bar(x, y, total_width, name, value, maximum, bar_color, back_color):
+def render_bar(x, y, total_width, name, value, maximum,
+               bar_color, back_color, overflow=False):
     bar_width = int(float(value) / maximum * total_width)
     config.statscreen.set_default_background(back_color)
     config.statscreen.rect(x, y, total_width, 1, False,
                            flag=libtcodpy.BKGND_SET)
     config.statscreen.set_default_background(bar_color)
+    if bar_width > total_width:
+        bar_width = total_width
     if bar_width > 0:
         config.statscreen.rect(x, y, bar_width, 1, False,
                                flag=libtcodpy.BKGND_SET)
     config.statscreen.set_default_foreground(Color.white)
+    if overflow:
+        value += maximum
     config.statscreen.write(x + total_width / 2, y, ' ' + name + ': ' +
                             str(value) + '/' + str(maximum) + ' ',
                             align=config.CENTER)
