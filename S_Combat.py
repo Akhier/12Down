@@ -37,8 +37,14 @@ def Attack_Creature(attackid, attackerid, defenderid):
             direction = MC.Get_Direction_To(attackercoord, defendercoord)
             dodge = MC.Walk_Direction(defenderid, direction)
             if dodge:
-                Message('You dodge the ' + attacker.TileName + '\'s attack!',
-                        color=Color.yellow)
+                if defenderid == config.PlayerId:
+                    Message('You dodge the ' + attacker.TileName +
+                            '\'s attack!',
+                            color=Color.yellow)
+                else:
+                    Message('The ' + defender.TileName +
+                            ' dodges your attack!',
+                            color=Color.light_red)
     if roll > 10 and not dodge:
         damageroll = 0
         for i in range(attack.Dice):
@@ -66,6 +72,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 attacker.CurHp += drain
             else:
                 attacker.CurHp += damage
+            if attacker.CurHp > attacker.MaxHp * 2:
+                attacker.CurHp = attacker.MaxHp * 2
         if attackerid == config.PlayerId:
             if damage > 0:
                 Message('You hit the ' + defendertile.TileName + ' for ' +
@@ -82,26 +90,35 @@ def Attack_Creature(attackid, attackerid, defenderid):
                         ' hits you but deals no damage!', color=Color.yellow)
         if defender.CurHp <= 0:
             attacker.Xp += defender.Xp
-            dungeonlevelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-            dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
-            dungeonlevel.MonstersKilled += 1
-            defenderdeath = CM.get_Component('Death', defenderid)
-            for effect in defenderdeath.Effects:
-                effect(defenderid)
-            if defenderid in dungeonlevel.MonsterIds:
-                dungeonlevel.MonsterIds.remove(defenderid)
-                dungeonlevel.FeatureIds.append(defenderid)
-                CM.add_Component(defenderid, 'Seen', Seen(seen=True))
-            if dungeonlevel.MonstersKilled >= 10 and \
-                    not dungeonlevel.StairsPresent:
-                dungeonlevel.StairsPresent = True
-                create_stairs(dungeonlevelid)
-                Message('After having slayed many a monster the stairs have ' +
-                        'magically appeared at the center!', color=Color.gold)
-            elif dungeonlevel.MonstersKilled == 5:
-                PM.Place_Boss(dungeonlevel)
-                Message('A strong presence can now be felt in the Dungeon',
-                        color=Color.light_purple)
+            if 'LifeSaver' in defender.Special:
+                defender.Special['LifeSaver'] -= 1
+                if defender.Special['LifeSaver'] <= 0:
+                    defender.Special.pop('LifeSaver', None)
+                defender.CurHp = defender.MaxHp
+                MC.Teleport_Random(defenderid)
+            else:
+                dungeonlevelid = config.DungeonLevelIds[
+                    config.CurrentDungeonLevel]
+                dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+                dungeonlevel.MonstersKilled += 1
+                defenderdeath = CM.get_Component('Death', defenderid)
+                for effect in defenderdeath.Effects:
+                    effect(defenderid)
+                if defenderid in dungeonlevel.MonsterIds:
+                    dungeonlevel.MonsterIds.remove(defenderid)
+                    dungeonlevel.FeatureIds.append(defenderid)
+                    CM.add_Component(defenderid, 'Seen', Seen(seen=True))
+                if dungeonlevel.MonstersKilled >= 10 and \
+                        not dungeonlevel.StairsPresent:
+                    dungeonlevel.StairsPresent = True
+                    create_stairs(dungeonlevelid)
+                    Message('After having slayed many a monster the stairs ' +
+                            'have magically appeared at the center!',
+                            color=Color.gold)
+                elif dungeonlevel.MonstersKilled == 5:
+                    PM.Place_Boss(dungeonlevel)
+                    Message('A strong presence can now be felt in the Dungeon',
+                            color=Color.light_purple)
 
     else:
         if attackerid == config.PlayerId:

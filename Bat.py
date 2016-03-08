@@ -25,7 +25,7 @@ def make_bat(coord, dungeonlevel):
                      Death('The small bat lets out one final pitiful squeak.',
                            '~', effects=[death_cleanup]))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(3, 0, 8, 12, 5, 12))
+                     Creature(3, 0, 8, 12, 5, 15))
     CM.add_Component(newmonsterid, 'Action', Bat_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 
@@ -42,7 +42,7 @@ def make_vampire_bat(coord, dungeonlevel):
                            ' The once dread creature is no more.',
                            '~', effects=deatheffects))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(6, 0, 10, 12, 5, 36))
+                     Creature(6, 0, 10, 12, 5, 60))
     CM.add_Component(newmonsterid, 'Action', Bat_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 
@@ -69,7 +69,7 @@ def vampires_choice(vampireid):
         Message('The glow flows into you and suddenly you feel jumpy.')
     if choice == 2:
         playercreature.MaxHp += 10
-        playercreature.CurHp = playercreature.MaxHp
+        playercreature.CurHp = playercreature.MaxHp * 2
         Message('Drink it\'s blood, tis only fair!')
 
 

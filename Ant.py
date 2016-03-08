@@ -24,7 +24,7 @@ def make_ant(coord, dungeonlevel):
                            'as it breaths it\'s final breath',
                            '~', effects=[death_cleanup]))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(1, 5, 10, 5, 5, 7))
+                     Creature(1, 5, 10, 5, 5, 8))
     CM.add_Component(newmonsterid, 'Action', Ant_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 
@@ -41,7 +41,7 @@ def make_queen_ant(coord, dungeonlevel):
                            ' The once majestic creature now pitiful.',
                            '~', effects=deatheffects))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(5, 10, 10, 5, 4, 21))
+                     Creature(5, 10, 10, 5, 4, 32))
     CM.add_Component(newmonsterid, 'Action', Ant_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 

@@ -1,7 +1,8 @@
 from ComponentManager import ComponentManager as CM
 from Enum_Direction import Direction
-from random import shuffle
+from random import shuffle, randint
 from C_Coord import Coord
+import config
 
 
 def Walk_Direction(creatureid, direction):
@@ -100,3 +101,23 @@ def Get_Opposite_Direction(direction):
         return Direction.NE
     elif direction == Direction.SE:
         return Direction.NW
+
+
+def Teleport_Random(creatureid):
+    cCoord = CM.get_Component('Coord', creatureid)
+    x = randint(1, config.playscreen_width - 1)
+    y = randint(1, config.playscreen_height - 1)
+    newCoord = Coord(x, y)
+    Coords = CM.dict_of('Coord')
+    walkable = True
+    for key, value in Coords.iteritems():
+        if value == newCoord:
+            if CM.check_Component('Tile', key):
+                tile = CM.get_Component('Tile', key)
+                if not tile.Passable:
+                    walkable = False
+    if walkable:
+        cCoord.X = newCoord.X
+        cCoord.Y = newCoord.Y
+    else:
+        Random_Teleport(creatureid)

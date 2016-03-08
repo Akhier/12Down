@@ -62,7 +62,8 @@ def check_level_up():
     level_up_xp = int(config.xptolevel * config.xpscale)
     playercreature = CM.get_Component('Creature', config.PlayerId)
     if playercreature.Xp >= level_up_xp:
-        playercreature.CurHp = playercreature.MaxHp
+        if playercreature.CurHp < playercreature.MaxHp:
+            playercreature.CurHp = playercreature.MaxHp
         playercreature.Xp = level_up_xp - playercreature.Xp
         playerlevel = CM.get_Component('Level', config.PlayerId)
         playerlevel.level += 1

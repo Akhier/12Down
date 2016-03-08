@@ -4,10 +4,12 @@ import config
 import random
 import Ant
 import Bat
+import Cat
 
 
-monsters = {1: Ant.make_ant, 2: Bat.make_bat}
-bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat}
+monsters = {1: Ant.make_ant, 2: Bat.make_bat, 3: Cat.make_cat}
+bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat,
+                3: Cat.make_twin_tailed_cat}
 
 
 def Place_Monsters_On_Level(dungeonlevelid):
@@ -23,6 +25,13 @@ def Place_Monsters_On_Level(dungeonlevelid):
                 monster = monsters[1]
             else:
                 monster = monsters[2]
+        else:
+            if random.randint(1, 10) > 1:
+                monster = monsters[dungeonlevel.Level]
+            elif random.randint(1, 10) > 1:
+                monster = monsters[dungeonlevel.Level - 1]
+            else:
+                monster = monsters[dungeonlevel.Level - 2]
         x = random.randint(1, curmap.Width - 1)
         y = random.randint(1, curmap.Height - 1)
         if x < curmap.Width / 2 - 4 or x > curmap.Width / 2 + 4 or \

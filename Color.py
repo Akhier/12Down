@@ -6,6 +6,7 @@ darker_red = libtcodpy.darker_red
 gray = libtcodpy.gray
 dark_gray = libtcodpy.dark_gray
 yellow = libtcodpy.yellow
+orange = libtcodpy.orange
 white = libtcodpy.white
 red = libtcodpy.red
 sky = libtcodpy.sky
