@@ -84,13 +84,13 @@ def Render():
                Color.green, Color.darker_green)
     config.statscreen.write_wrap(2, 4, config.statscreen_width - 4, 2,
                                  'Name: ' + config.PlayerName)
-    config.statscreen.write(2, 6, 'Def: ' +
+    config.statscreen.write(2, 7, 'Def: ' +
                             str(playercreature.Defense) + '   ')
-    config.statscreen.write(2, 8, 'Str: ' +
+    config.statscreen.write(2, 10, 'Str: ' +
                             str(playercreature.Strength) + '   ')
-    config.statscreen.write(2, 10, 'Agi: ' +
+    config.statscreen.write(2, 13, 'Agi: ' +
                             str(playercreature.Agility) + '   ')
-    config.statscreen.write(2, 12, 'Atk: ' + str(playerattack.Dice) +
+    config.statscreen.write(2, 16, 'Atk: ' + str(playerattack.Dice) +
                             'd' + str(playerattack.Sides) + '   ')
     config.playscreen.blit()
     config.messagescreen.blit()
