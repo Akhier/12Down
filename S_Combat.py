@@ -52,6 +52,12 @@ def Attack_Creature(attackid, attackerid, defenderid):
         damage = int(damageroll * strmod)
         if damage < 1:
             damage = 1
+        crithappend = False
+        if 'CritChance' in attacker.Special:
+            if random.randint(1, 100) <= attacker.Special['CritChance']:
+                damage = damage * 2
+                crithappend = True
+
         for i in range(defender.Defense):
             if damage > 0:
                 chance = random.randint(1, 100)
@@ -74,17 +80,20 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 attacker.CurHp += damage
             if attacker.CurHp > attacker.MaxHp * 2:
                 attacker.CurHp = attacker.MaxHp * 2
+        hit = 'hit'
+        if crithappend:
+            hit = 'crit'
         if attackerid == config.PlayerId:
             if damage > 0:
-                Message('You hit the ' + defendertile.TileName + ' for ' +
-                        str(damage) + '!', color=Color.sky)
+                Message('You ' + hit + ' the ' + defendertile.TileName +
+                        ' for ' + str(damage) + '!', color=Color.sky)
             else:
                 Message('You hit the ' + defendertile.TileName +
                         ' but deal no damage', color=Color.light_red)
         elif defenderid == config.PlayerId:
             if damage > 0:
-                Message('The ' + attackertile.TileName + ' hits you for ' +
-                        str(damage) + '!', color=Color.red)
+                Message('The ' + attackertile.TileName + ' ' + hit +
+                        's you for ' + str(damage) + '!', color=Color.red)
             else:
                 Message('The ' + attackertile.TileName +
                         ' hits you but deals no damage!', color=Color.yellow)

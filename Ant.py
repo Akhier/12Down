@@ -57,7 +57,10 @@ def queens_choice(queenid):
     if choice == 0:
         playercreature.BaseAgility -= 1
         playercreature.BaseDefense += 1
-        playercreature.Special['EnhancedDefense'] = 25
+        if 'EnhancedDefense' in playercreature.Special:
+            playercreature.Special['EnhancedDefense'] += 15
+        else:
+            playercreature.Special['EnhancedDefense'] = 25
         Message('Your armor feels studier though it is stiffer')
     if choice == 1:
         playerattack = CM.get_Component('Attack', config.PlayerAttack)

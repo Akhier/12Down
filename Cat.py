@@ -66,7 +66,11 @@ def twin_tailed_choice(twintailid):
                 'can see in the dark better!')
     if choice == 2:
         playercreature.BaseAgility += 4
-        playercreature.BaseDefense += 4
+        if 'EnhancedDefense' in playercreature.Special:
+            playercreature.Special['EnhancedDefense'] += 5
+        else:
+            playercreature.Special['EnhancedDefense'] = 10
+        playercreature.BaseDefense += 2
         Message('Somehow your armor is not only better at absorbing ' +
                 'blows but also better fitting.')
 

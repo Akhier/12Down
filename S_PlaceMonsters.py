@@ -5,11 +5,13 @@ import random
 import Ant
 import Bat
 import Cat
+import Dog
 
 
-monsters = {1: Ant.make_ant, 2: Bat.make_bat, 3: Cat.make_cat}
+monsters = {1: Ant.make_ant, 2: Bat.make_bat, 3: Cat.make_cat,
+            4: Dog.make_dog}
 bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat,
-                3: Cat.make_twin_tailed_cat}
+                3: Cat.make_twin_tailed_cat, 4: Dog.make_rabid_dog}
 
 
 def Place_Monsters_On_Level(dungeonlevelid):
