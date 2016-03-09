@@ -7,13 +7,14 @@ import Bat
 import Cat
 import Dog
 import Elephant
+import Frog
 
 
 monsters = {1: Ant.make_ant, 2: Bat.make_bat, 3: Cat.make_cat,
-            4: Dog.make_dog, 5: Elephant.make_elephant}
+            4: Dog.make_dog, 5: Elephant.make_elephant, 6: Frog.make_frog}
 bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat,
                 3: Cat.make_twin_tailed_cat, 4: Dog.make_rabid_dog,
-                5: Elephant.make_pink_elephant}
+                5: Elephant.make_pink_elephant, 6: Frog.make_poison_frog}
 
 
 def Place_Monsters_On_Level(dungeonlevelid):

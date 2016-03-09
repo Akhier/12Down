@@ -77,7 +77,8 @@ class Elephant_AI:
     def __init__(self, elephantid):
         self.ElephantId = elephantid
         self.BasicAttackId = EM.new_Id
-        CM.add_Component(self.BasicAttackId, 'Attack', Attack(1, 6))
+        CM.add_Component(self.BasicAttackId, 'Attack',
+                         Attack(2, 4, special={'PierceDefense': 10}))
         self.resting = False
 
     def take_turn(self):

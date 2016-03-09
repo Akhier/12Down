@@ -28,7 +28,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
             strmod = tempstr / tempnum + strmod
         tempstr = tempstr - 10
     agimod = attacker.Agility - defender.Agility
-    roll = random.randint(1, 20) + agimod
+    baseroll = random.randint(1, 20)
+    roll = baseroll + agimod
     dodge = False
     if roll > 10 and 'Dodge' in defender.Special:
         dodgechance = defender.Special['Dodge']
@@ -45,7 +46,7 @@ def Attack_Creature(attackid, attackerid, defenderid):
                     Message('The ' + defendertile.TileName +
                             ' dodges your attack!',
                             color=Color.light_red)
-    if roll > 10 and not dodge:
+    if (roll > 10 or baseroll == 20) and not dodge and baseroll != 1:
         damageroll = 0
         for i in range(attack.Dice):
             damageroll = random.randint(1, attack.Sides)

@@ -89,9 +89,9 @@ def check_level_up():
         playerlevel.level += 1
         config.xptolevel = level_up_xp
         choice = None
-        options = ['+2hp, +1Def, +1Str, +1Agi',
-                   '+6hp and +2Def', '+6hp and +2Str',
-                   '+6hp and +2Agi', '+10hp']
+        options = ['+2hp, +1Def, +1Str, +1Agi, +1Free',
+                   '+4hp and +3Def', '+4hp and +3Str',
+                   '+4hp and +3Agi', '+12hp']
         sdef = False
         sstr = False
         sagi = False
@@ -114,21 +114,35 @@ def check_level_up():
             playercreature.BaseDefense += 1
             playercreature.BaseStrength += 1
             playercreature.BaseAgility += 1
+            choice2 = None
+            while choice2 is None:
+                choice2 = Menu('Where do you want your free point?\n\n\n\n',
+                               ['+2hp', '+1Def', '+1Str', '+1Agi'],
+                               config.messagescreen_width)
+            if choice2 == 0:
+                playercreature.MaxHp += 2
+                playercreature.CurHp += 2
+            elif choice2 == 1:
+                playercreature.BaseDefense += 1
+            elif choice2 == 2:
+                playercreature.BaseStrength += 1
+            elif choice2 == 3:
+                playercreature.BaseAgility += 1
         elif choice == 1:
-            playercreature.MaxHp += 6
-            playercreature.CurHp += 6
-            playercreature.BaseDefense += 2
+            playercreature.MaxHp += 4
+            playercreature.CurHp += 4
+            playercreature.BaseDefense += 3
         elif choice == 2:
-            playercreature.MaxHp += 6
-            playercreature.CurHp += 6
-            playercreature.BaseStrength += 2
+            playercreature.MaxHp += 4
+            playercreature.CurHp += 4
+            playercreature.BaseStrength += 3
         elif choice == 3:
-            playercreature.MaxHp += 6
-            playercreature.CurHp += 6
-            playercreature.BaseAgility += 2
+            playercreature.MaxHp += 4
+            playercreature.CurHp += 4
+            playercreature.BaseAgility += 3
         elif choice == 4:
-            playercreature.MaxHp += 10
-            playercreature.CurHp += 10
+            playercreature.MaxHp += 12
+            playercreature.CurHp += 12
         elif choice == 5:
             if sdef:
                 playercreature.BaseDefense -= 4
