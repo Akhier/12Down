@@ -12,8 +12,6 @@ def Render():
     playercoord = CM.get_Component('Coord', config.PlayerId)
     playercreature = CM.get_Component('Creature', config.PlayerId)
     playertile = CM.get_Component('Tile', config.PlayerId)
-    playerlevel = CM.get_Component('Level', config.PlayerId)
-    playerattack = CM.get_Component('Attack', config.PlayerAttack)
     if config.fov_recompute:
         config.fov_recompute = False
         curmap = CM.get_Component('Map', curmapid)
@@ -69,29 +67,7 @@ def Render():
         config.messagescreen.write(1, y, line)
         config.messagescreen.set_default_foreground(Color.white)
         y += 1
-    if playercreature.CurHp < playercreature.MaxHp:
-        render_bar(2, 2, config.statscreen_width - 4, 'HP',
-                   playercreature.CurHp, playercreature.MaxHp,
-                   Color.light_red, Color.darker_red)
-    else:
-        render_bar(2, 2, config.statscreen_width - 4, 'HP',
-                   playercreature.CurHp - playercreature.MaxHp,
-                   playercreature.MaxHp, Color.lighter_red,
-                   Color.light_red, overflow=True)
-    render_bar(2, config.statscreen_height - 3,
-               config.statscreen_width - 4, 'LV ' + str(playerlevel.level),
-               playercreature.Xp, int(config.xptolevel * config.xpscale),
-               Color.green, Color.darker_green)
-    config.statscreen.write_wrap(2, 4, config.statscreen_width - 4, 2,
-                                 'Name: ' + config.PlayerName)
-    config.statscreen.write(2, 7, 'Def: ' +
-                            str(playercreature.Defense) + '   ')
-    config.statscreen.write(2, 10, 'Str: ' +
-                            str(playercreature.Strength) + '   ')
-    config.statscreen.write(2, 13, 'Agi: ' +
-                            str(playercreature.Agility) + '   ')
-    config.statscreen.write(2, 16, 'Atk: ' + str(playerattack.Dice) +
-                            'd' + str(playerattack.Sides) + '   ')
+    render_statscreen()
     config.playscreen.blit()
     config.messagescreen.blit()
     config.statscreen.blit()
@@ -115,3 +91,68 @@ def render_bar(x, y, total_width, name, value, maximum,
     config.statscreen.write(x + total_width / 2, y, ' ' + name + ': ' +
                             str(value) + '/' + str(maximum) + ' ',
                             align=config.CENTER)
+
+
+def render_statscreen():
+    config.statscreen.set_default_background(Color.black)
+    config.statscreen.set_default_foreground(Color.white)
+    config.statscreen.clear
+    # playercoord = CM.get_Component('Coord', config.PlayerId)
+    # playertile = CM.get_Component('Tile', config.PlayerId)
+    PC = CM.get_Component('Creature', config.PlayerId)
+    PL = CM.get_Component('Level', config.PlayerId)
+    PA = CM.get_Component('Attack', config.PlayerAttack)
+    overflowhpcolor = Color.lighter_red
+    curhpcolor = Color.light_red
+    losthpcolor = Color.darker_red
+    if 'Poisoned' in PC.Special:
+        overflowhpcolor = Color.lighter_green
+        curhpcolor = Color.light_green
+        losthpcolor = Color.darker_green
+    barwidth = config.statscreen_width - 4
+    if PC.CurHp < PC.MaxHp:
+        render_bar(2, 2, barwidth, 'HP', PC.CurHp,
+                   PC.MaxHp, curhpcolor, losthpcolor)
+    else:
+        render_bar(2, 2, barwidth, 'HP',
+                   PC.CurHp - PC.MaxHp, PC.MaxHp, overflowhpcolor,
+                   curhpcolor, overflow=True)
+    bottomybar = config.statscreen_height - 2
+    render_bar(2, bottomybar, barwidth, 'LV ' + str(PL.level),
+               PC.Xp, int(config.xptolevel * config.xpscale),
+               Color.blue, Color.darker_blue)
+    bottomybar -= 2
+    config.statscreen.write(2, 1, 'Name: ' + config.PlayerName)
+    statlist = ['Def: ' + str(PC.Defense)]
+    if 'EnhancedDefense' in PC.Special:
+        statlist.append('^Df: ' + str(PC.Special['EnhancedDefense']))
+    statlist.extend(['Str: ' + str(PC.Strength),
+                     'Agi: ' + str(PC.Agility),
+                     'Atk: ' + str(PA.Dice) + 'd' + str(PA.Sides)])
+    if 'LifeDrain' in PA.Special:
+        statlist.append('LDr: ' + str(PA.Special['LifeDrain']))
+    if 'PierceDefense' in PA.Special:
+        statlist.append('PDf: ' + str(PA.Special['PierceDefense']))
+    if 'Dodge' in PC.Special:
+        statlist.append('Ddg: ' + str(PC.Special['Dodge']))
+    if 'CritChance' in PC.Special:
+        statlist.append('Crt: ' + str(PC.Special['CritChance']))
+    if 'RandomBlink' in PC.Special:
+        statlist.append('Bnk: ' + str(PC.Special['RandomBlink']))
+    if 'HealthPotion' in PC.Special:
+        statlist.append('Hpt: ' + str(PC.Special['HealthPotion']))
+    if 'LifeSaver' in PC.Special:
+        statlist.append('%$#: @')
+    statnum = len(statlist) + 1
+    space = config.statscreen_height - 6
+    if 'CardinalLeap' in PC.Special:
+        (need, cur, dist) = PC.Special['CardinalLeap']
+        space -= 2
+        render_bar(2, bottomybar, barwidth, 'Lp' + str(dist), cur, need,
+                   Color.dark_yellow, Color.darker_yellow)
+        bottomybar -= 2
+    spacing = int(space / statnum)
+    y = 2 + spacing
+    for stat in statlist:
+        config.statscreen.write(2, y, stat)
+        y += spacing

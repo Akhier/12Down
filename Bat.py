@@ -25,7 +25,7 @@ def make_bat(coord, dungeonlevel):
                      Death('The small bat lets out one final pitiful squeak.',
                            '~', effects=[death_cleanup]))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(3, 0, 8, 12, 5, 15))
+                     Creature(3, 0, 8, 10, 5, 15))
     CM.add_Component(newmonsterid, 'Action', Bat_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 
@@ -42,7 +42,7 @@ def make_vampire_bat(coord, dungeonlevel):
                            ' The once dread creature is no more.',
                            '~', effects=deatheffects))
     CM.add_Component(newmonsterid, 'Creature',
-                     Creature(6, 0, 10, 12, 5, 60))
+                     Creature(6, 0, 10, 11, 5, 60))
     CM.add_Component(newmonsterid, 'Action', Bat_AI(newmonsterid))
     dungeonlevel.MonsterIds.append(newmonsterid)
 
@@ -79,7 +79,7 @@ class Bat_AI:
         self.BatId = batid
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
-                         Attack(1, 2, {'LifeDrain': 1}))
+                         Attack(1, 1, {'LifeDrain': 1}))
 
     def take_turn(self):
         batcoord = CM.get_Component('Coord', self.BatId)

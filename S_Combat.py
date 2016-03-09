@@ -72,6 +72,56 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 damage = 0
                 break
         defender.CurHp -= damage
+        if damage > 0 and 'Poison' in attack.Special:
+            (percentchance, turns, damage) = attack.Special['Poison']
+            chance = random.randint(1, 100)
+            modpercentchance = 0
+            if 'PoisonResistance' in defender.Special:
+                modpercentchance = defender.Special['PoisonResistance']
+            if percentchance <= 0:
+                if defenderid == config.PlayerId:
+                    Message('You completely resist the poison!',
+                            color=Color.yellow)
+                else:
+                    Message('The ' + defender.TileName +
+                            ' completely resists the poison!',
+                            color=Color.yellow)
+            if chance <= percentchance:
+                if chance > percentchance - modpercentchance:
+                    if defenderid == config.PlayerId:
+                        Message('You resist the poison!',
+                                color=Color.yellow)
+                    else:
+                        Message('The ' + defender.TileName +
+                                ' resists the poison!',
+                                color=Color.yellow)
+                else:
+                    if 'Poisoned' in defender.Special:
+                        (turnsleft, damageturn, sourceid) = defender.Special[
+                            'Poisoned']
+                        if damageturn > damage:
+                            newdamage = damageturn
+                        else:
+                            newdamage = damage
+                        if turnsleft > turns:
+                            newturns = turnsleft
+                        else:
+                            newturns = turns
+                        defender.Special['Poisoned'] = (
+                            newturns, newdamage, attackerid)
+                    else:
+                        newturns = turns
+                        newdamage = damage
+                        defender.Special['Poisoned'] = (
+                            newturns, newdamage, attackerid)
+                    if defenderid == config.PlayerId:
+                        Message('You are now poisoned for ' +
+                                str(newturns) + ' turns!',
+                                color=Color.dark_green)
+                    else:
+                        Message('The ' + defender.TileName +
+                                ' has been poisoned!',
+                                color=Color.dark_green)
         if damage > 0 and 'LifeDrain' in attack.Special:
             drain = attack.Special['LifeDrain']
             if drain < damage:
@@ -97,37 +147,7 @@ def Attack_Creature(attackid, attackerid, defenderid):
             else:
                 Message('The ' + attackertile.TileName +
                         ' hits you but deals no damage!', color=Color.yellow)
-        if defender.CurHp <= 0:
-            attacker.Xp += defender.Xp
-            if 'LifeSaver' in defender.Special:
-                defender.Special['LifeSaver'] -= 1
-                if defender.Special['LifeSaver'] <= 0:
-                    defender.Special.pop('LifeSaver', None)
-                defender.CurHp = defender.MaxHp
-                MC.Teleport_Random(defenderid)
-            else:
-                dungeonlevelid = config.DungeonLevelIds[
-                    config.CurrentDungeonLevel]
-                dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
-                dungeonlevel.MonstersKilled += 1
-                defenderdeath = CM.get_Component('Death', defenderid)
-                for effect in defenderdeath.Effects:
-                    effect(defenderid)
-                if defenderid in dungeonlevel.MonsterIds:
-                    dungeonlevel.MonsterIds.remove(defenderid)
-                    dungeonlevel.FeatureIds.append(defenderid)
-                    CM.add_Component(defenderid, 'Seen', Seen(seen=True))
-                if dungeonlevel.MonstersKilled >= 10 and \
-                        not dungeonlevel.StairsPresent:
-                    dungeonlevel.StairsPresent = True
-                    create_stairs(dungeonlevelid)
-                    Message('After having slayed many a monster the stairs ' +
-                            'have magically appeared at the center!',
-                            color=Color.gold)
-                elif dungeonlevel.MonstersKilled == 5:
-                    PM.Place_Boss(dungeonlevel)
-                    Message('A strong presence can now be felt in the Dungeon',
-                            color=Color.light_purple)
+        check_death(attackerid, defenderid)
 
     else:
         if attackerid == config.PlayerId:
@@ -148,3 +168,41 @@ def Attack_Coord(attackid, attackerid, coordtoattack):
             idtoattacks.append(key)
     for key in idtoattacks:
         Attack_Creature(attackid, attackerid, key)
+
+
+def check_death(attackerid, defenderid):
+    attacker = CM.get_Component('Creature', attackerid)
+    defender = CM.get_Component('Creature', defenderid)
+    if defender.CurHp <= 0:
+        attacker.Xp += defender.Xp
+        if 'LifeSaver' in defender.Special:
+            defender.Special['LifeSaver'] -= 1
+            if defender.Special['LifeSaver'] <= 0:
+                defender.Special.pop('LifeSaver', None)
+            defender.CurHp = defender.MaxHp
+            if 'Poisoned' in defender.Special:
+                defender.Special.pop('Poisoned', None)
+            MC.Teleport_Random(defenderid)
+        else:
+            dungeonlevelid = config.DungeonLevelIds[
+                config.CurrentDungeonLevel]
+            dungeonlevel = CM.get_Component('DungeonLevel', dungeonlevelid)
+            dungeonlevel.MonstersKilled += 1
+            defenderdeath = CM.get_Component('Death', defenderid)
+            for effect in defenderdeath.Effects:
+                effect(defenderid)
+            if defenderid in dungeonlevel.MonsterIds:
+                dungeonlevel.MonsterIds.remove(defenderid)
+                dungeonlevel.FeatureIds.append(defenderid)
+                CM.add_Component(defenderid, 'Seen', Seen(seen=True))
+            if dungeonlevel.MonstersKilled >= 10 and \
+                    not dungeonlevel.StairsPresent:
+                dungeonlevel.StairsPresent = True
+                create_stairs(dungeonlevelid)
+                Message('After having slayed many a monster the stairs ' +
+                        'have magically appeared at the center!',
+                        color=Color.gold)
+            elif dungeonlevel.MonstersKilled == 5:
+                PM.Place_Boss(dungeonlevel)
+                Message('A strong presence can now be felt in the Dungeon',
+                        color=Color.light_purple)

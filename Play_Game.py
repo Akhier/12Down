@@ -1,5 +1,6 @@
 from ComponentManager import ComponentManager as CM
 from Handle_Keys import Handle_Keys
+from S_Combat import check_death
 from S_MapInfo import char_map
 from Render import Render
 from Menu import Menu
@@ -53,10 +54,28 @@ def Play_Game():
         if config.game_state == 'playing' and \
                 config.player_action != 'no action':
             actions = CM.dict_of('Action')
-            actions.keys()
-            for key in actions:
+            keylist = list(actions.keys())
+            for key in keylist:
                 if key in objectids:
                     actions[key].take_turn()
+            creatures = CM.dict_of('Creature')
+            for Id, creature in creatures.iteritems():
+                if 'Poisoned' in creature.Special:
+                    (turnsleft, damage, attackerid) = creature.Special[
+                        'Poisoned']
+                    creature.CurHp -= damage
+                    turnsleft -= 1
+                    if turnsleft <= 0:
+                        creature.Special.pop('Poisoned', None)
+                    else:
+                        creature.Special['Poisoned'] = (
+                            turnsleft, damage, attackerid)
+                    check_death(attackerid, Id)
+                if 'CardinalLeap' in creature.Special:
+                    (need, cur, dist) = creature.Special['CardinalLeap']
+                    if cur < need:
+                        cur += 1
+                        creature.Special['CardinalLeap'] = (need, cur, dist)
 
 
 def check_level_up():

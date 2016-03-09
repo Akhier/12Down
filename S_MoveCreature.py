@@ -1,6 +1,6 @@
 from ComponentManager import ComponentManager as CM
+from random import shuffle, randint, choice
 from Enum_Direction import Direction
-from random import shuffle, randint
 from C_Coord import Coord
 import config
 
@@ -22,6 +22,14 @@ def Walk_Direction(creatureid, direction):
         return True
     else:
         return False
+
+
+def Walk_Direction_Multiple(creatureid, direction, tilestowalk):
+    complete = True
+    for i in range(tilestowalk):
+        if not Walk_Direction(creatureid, direction):
+            complete = False
+    return complete
 
 
 def Get_Direction_To(sourcecoord, targetcoord):
@@ -120,4 +128,29 @@ def Teleport_Random(creatureid):
         cCoord.X = newCoord.X
         cCoord.Y = newCoord.Y
     else:
-        Random_Teleport(creatureid)
+        Teleport_Random(creatureid)
+
+
+def Blink_Random(creatureid, mindist=4, maxdist=10):
+    cCoord = CM.get_Component('Coord', creatureid)
+    x = randint(mindist, maxdist) * choice([-1, 1])
+    y = randint(mindist, maxdist) * choice([-1, 1])
+    newCoord = Coord(cCoord.X + x, cCoord.Y + y)
+    while newCoord.X < 1 or newCoord.X > config.playscreen_width - 3 or \
+            newCoord.Y < 1 or newCoord.Y > config.playscreen_height - 3:
+        x = randint(mindist, maxdist) * choice([-1, 1])
+        y = randint(mindist, maxdist) * choice([-1, 1])
+        newCoord = Coord(cCoord.X + x, cCoord.Y + y)
+    Coords = CM.dict_of('Coord')
+    walkable = True
+    for key, value in Coords.iteritems():
+        if value == newCoord:
+            if CM.check_Component('Tile', key):
+                tile = CM.get_Component('Tile', key)
+                if not tile.Passable:
+                    walkable = False
+    if walkable:
+        cCoord.X = newCoord.X
+        cCoord.Y = newCoord.Y
+    else:
+        Blink_Random(creatureid, mindist, maxdist)

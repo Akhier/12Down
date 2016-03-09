@@ -47,7 +47,7 @@ def make_rabid_dog(coord, dungeonlevel):
     dungeonlevel.MonsterIds.append(newmonsterid)
 
 
-def rabid_choice(twintailid):
+def rabid_choice(rabidid):
     choice = None
     while choice is None:
         choice = Menu('The Rabid Dog was put down. ' +
