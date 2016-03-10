@@ -126,17 +126,21 @@ def render_statscreen():
     statlist = ['Def: ' + str(PC.Defense)]
     if 'EnhancedDefense' in PC.Special:
         statlist.append('^Df: ' + str(PC.Special['EnhancedDefense']))
-    statlist.extend(['Str: ' + str(PC.Strength),
-                     'Agi: ' + str(PC.Agility),
-                     'Atk: ' + str(PA.Dice) + 'd' + str(PA.Sides)])
+    statlist.append('Str: ' + str(PC.Strength))
+    statlist.append('Agi: ' + str(PC.Agility))
+    statlist.append('Atk: ' + str(PA.Dice) + 'd' + str(PA.Sides))
     if 'LifeDrain' in PA.Special:
         statlist.append('LDr: ' + str(PA.Special['LifeDrain']))
     if 'PierceDefense' in PA.Special:
         statlist.append('PDf: ' + str(PA.Special['PierceDefense']))
+    if 'SideSwipe' in PC.Special:
+        statlist.append('Side SideSwipe')
     if 'Dodge' in PC.Special:
         statlist.append('Ddg: ' + str(PC.Special['Dodge']))
     if 'CritChance' in PC.Special:
         statlist.append('Crt: ' + str(PC.Special['CritChance']))
+    if 'ReduceCrit' in PC.Special:
+        statlist.append('RCr: ' + str(PC.Special['ReduceCrit']))
     if 'RandomBlink' in PC.Special:
         statlist.append('Bnk: ' + str(PC.Special['RandomBlink']))
     if 'HealthPotion' in PC.Special:

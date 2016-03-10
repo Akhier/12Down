@@ -28,6 +28,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
             strmod = tempstr / tempnum + strmod
         tempstr = tempstr - 10
     agimod = attacker.Agility - defender.Agility
+    if 'PlusAgility' in attack.Special:
+        agimod += attack.Special['PlusAgility']
     baseroll = random.randint(1, 20)
     roll = baseroll + agimod
     dodge = False
@@ -55,8 +57,11 @@ def Attack_Creature(attackid, attackerid, defenderid):
             damage = 1
         crithappend = False
         if 'CritChance' in attacker.Special:
+            critmod = 1
+            if 'ReduceCrit' in defender.Special:
+                critmod = critmod * (defender.Special['ReduceCrit'] / 100)
             if random.randint(1, 100) <= attacker.Special['CritChance']:
-                damage = damage * 2
+                damage = damage * (critmod + 1)
                 crithappend = True
 
         for i in range(defender.Defense):
@@ -65,8 +70,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 percentchance = 25
                 if 'EnhancedDefense' in defender.Special:
                     percentchance += defender.Special['EnhancedDefense']
-                if 'PierceDefense' in attacker.Special:
-                    percentchance -= attacker.Special['PierceDefense']
+                if 'PierceDefense' in attack.Special:
+                    percentchance -= attack.Special['PierceDefense']
                 if chance <= percentchance:
                     damage -= 1
             if damage <= 0:

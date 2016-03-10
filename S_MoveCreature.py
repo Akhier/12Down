@@ -24,12 +24,28 @@ def Walk_Direction(creatureid, direction):
         return False
 
 
+def Walk_Direction_Persistantly(creatureid, direction):
+    if not Walk_Direction(creatureid, direction):
+        directions = Get_Alt_Direction_To(direction)
+        if not Walk_Direction(creatureid, directions[0]):
+            if not Walk_Direction(creatureid, directions[1]):
+                return False
+    return True
+
+
 def Walk_Direction_Multiple(creatureid, direction, tilestowalk):
     complete = True
     for i in range(tilestowalk):
         if not Walk_Direction(creatureid, direction):
             complete = False
     return complete
+
+
+def Walk_Random(creatureid):
+    direction = [Direction.N, Direction.S, Direction.E, Direction.W,
+                 Direction.NE, Direction.NW, Direction.SE, Direction.SW]
+    if not Walk_Direction_Persistantly(creatureid, direction):
+        Walk_Random(creatureid)
 
 
 def Get_Direction_To(sourcecoord, targetcoord):

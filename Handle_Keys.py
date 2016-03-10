@@ -29,6 +29,9 @@ def Handle_Keys():
         if curenergy >= neededenergy:
             cardinalleap = True
             dist = distance
+    sideswipe = False
+    if 'SideSwipe' in playercreature.Special:
+        sideswipe = True
     if config.game_state == 'playing':
         if config.key.vk == libtcodpy.KEY_UP or \
                 config.key.vk == libtcodpy.KEY_KP8:
@@ -81,6 +84,11 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_HOME or \
                 config.key.vk == libtcodpy.KEY_KP7:
             if MC.Walk_Direction(config.PlayerId, Dir.NW):
+                if sideswipe:
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.N))
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.W))
                 config.fov_recompute = True
             else:
                 Attack_Coord(config.PlayerAttack, config.PlayerId,
@@ -88,6 +96,11 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_PAGEUP or \
                 config.key.vk == libtcodpy.KEY_KP9:
             if MC.Walk_Direction(config.PlayerId, Dir.NE):
+                if sideswipe:
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.N))
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.E))
                 config.fov_recompute = True
             else:
                 Attack_Coord(config.PlayerAttack, config.PlayerId,
@@ -95,6 +108,11 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_END or \
                 config.key.vk == libtcodpy.KEY_KP1:
             if MC.Walk_Direction(config.PlayerId, Dir.SW):
+                if sideswipe:
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.S))
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.W))
                 config.fov_recompute = True
             else:
                 Attack_Coord(config.PlayerAttack, config.PlayerId,
@@ -102,6 +120,11 @@ def Handle_Keys():
         elif config.key.vk == libtcodpy.KEY_PAGEDOWN or \
                 config.key.vk == libtcodpy.KEY_KP3:
             if MC.Walk_Direction(config.PlayerId, Dir.SE):
+                if sideswipe:
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.S))
+                    Attack_Coord(config.PlayerAttack, config.PlayerId,
+                                 playercoord.get_coord_from_self(Dir.E))
                 config.fov_recompute = True
             else:
                 Attack_Coord(config.PlayerAttack, config.PlayerId,

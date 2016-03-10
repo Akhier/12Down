@@ -1,3 +1,4 @@
+from C_Coord import Coord
 import math
 
 
@@ -29,6 +30,16 @@ class Fov_RSC:
         for octant in range(1, 9):
             self._scan(1, octant, 1.0, 0.0)
         return self.visiblemap
+
+    def Coords_in_Sight(self, seethrough, sourcex, sourcey, sightrange):
+        tempvision = self.Calculate_Sight(
+            seethrough, sourcex, sourcey, sightrange)
+        coordvision = []
+        for y in range(self.height):
+            for x in range(self.width):
+                if tempvision[x][y]:
+                    coordvision.append(Coord(x, y))
+        return coordvision
 
     def _scan(self, depth, octant, startslope, endslope):
         x = 0

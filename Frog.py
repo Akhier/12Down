@@ -18,7 +18,7 @@ def make_frog(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Coord', coord)
     CM.add_Component(newmonsterid, 'Tile',
                      Tile('Frog', 'f', False, True,
-                          color=Color.gray))
+                          color=Color.lighter_green))
     CM.add_Component(newmonsterid, 'Death',
                      Death('Squished frog, how droll.',
                            '~', effects=[death_cleanup]))
@@ -33,7 +33,7 @@ def make_poison_frog(coord, dungeonlevel):
     CM.add_Component(newmonsterid, 'Coord', coord)
     CM.add_Component(newmonsterid, 'Tile',
                      Tile('Poison Frog', 'F', False, True,
-                          color=Color.poison))
+                          color=Color.red))
     deatheffects = [death_cleanup, poison_choice]
     CM.add_Component(newmonsterid, 'Death',
                      Death('Congradulations! You didn\'t even need a blender.',
