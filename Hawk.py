@@ -93,21 +93,24 @@ class Hawk_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.Level)
-        vision = config.fov.Coords_in_Sight(seethrough, hawkcoord.X,
-                                            hawkcoord.Y,
-                                            hawkcreature.VisionRange)
-        if playercoord in vision:
-            disttoplayer = hypot(hawkcoord.X - playercoord.X,
-                                 hawkcoord.Y - playercoord.Y)
-            if int(disttoplayer) <= 1:
-                Attack_Coord(self.BasicAttackId, self.FrogId,
-                             playercoord)
-                MC.Walk_Direction_Persistantly(
-                    self.HawkId, MC.Get_Direction_To(hawkcoord, playercoord))
-            else:
-                direction = MC.Get_Direction_To(hawkcoord, playercoord)
-                if self.resting:
+        seethrough = seethrough_map(level.MapId)
+        disttoplayer = hypot(hawkcoord.X - playercoord.X,
+                             hawkcoord.Y - playercoord.Y)
+        if disttoplayer < hawkcreature.VisionRange:
+            vision = config.fov.Coords_in_Sight(seethrough, hawkcoord.X,
+                                                hawkcoord.Y,
+                                                hawkcreature.VisionRange)
+            if playercoord in vision:
+                if int(disttoplayer) <= 1:
+                    Attack_Coord(self.BasicAttackId, self.HawkId,
+                                 playercoord)
+                    MC.Walk_Direction_Persistantly(
+                        self.HawkId, MC.Get_Direction_To(
+                            hawkcoord, playercoord))
+                else:
+                    direction = MC.Get_Direction_To(hawkcoord, playercoord)
                     MC.Walk_Direction_Persistantly(self.HawkId, direction)
+            else:
+                MC.Walk_Random_Failable(self.HawkId)
         else:
-            MC.Walk_Random(self.HawkId)
+            MC.Walk_Random_Failable(self.HawkId)

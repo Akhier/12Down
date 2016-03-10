@@ -65,6 +65,7 @@ def clear_choice(clearid):
             playercreature.BaseAgility = 10
         else:
             playercreature.BaseAgility += 5
+        playercreature.Special['ParalyzeResistance'] = 5
         Message('Actually it tastes good and you feel a bit more flexible.')
     if choice == 2:
         if 'HealthPotion' in playercreature.Special:
@@ -82,6 +83,7 @@ class Jellyfish_AI:
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
                          Attack(2, 4, special={'Paralyze': 5}))
+        self.playerinvision = False
 
     def take_turn(self):
         jellyfishcreature = CM.get_Component('Creature', self.JellyfishId)
@@ -89,19 +91,27 @@ class Jellyfish_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.Level)
-        vision = config.fov.Coords_in_Sight(seethrough, jellyfishcoord.X,
-                                            jellyfishcoord.Y,
-                                            jellyfishcreature.VisionRange)
-        if playercoord in vision:
-            disttoplayer = hypot(jellyfishcoord.X - playercoord.X,
-                                 jellyfishcoord.Y - playercoord.Y)
-            if int(disttoplayer) <= 1:
-                Attack_Coord(self.BasicAttackId, self.FrogId,
-                             playercoord)
-            else:
-                direction = MC.Get_Direction_To(jellyfishcoord, playercoord)
-                if self.resting:
+        seethrough = seethrough_map(level.MapId)
+        disttoplayer = hypot(jellyfishcoord.X - playercoord.X,
+                             jellyfishcoord.Y - playercoord.Y)
+        if not self.playerinvision and \
+                disttoplayer <= jellyfishcreature.VisionRange:
+            vision = config.fov.Coords_in_Sight(seethrough, jellyfishcoord.X,
+                                                jellyfishcoord.Y,
+                                                jellyfishcreature.VisionRange)
+            if playercoord in vision:
+                self.playerinvision = True
+        if disttoplayer <= jellyfishcreature.VisionRange:
+            if self.playerinvision:
+                if int(disttoplayer) <= 1:
+                    Attack_Coord(self.BasicAttackId, self.JellyfishId,
+                                 playercoord)
+                else:
+                    direction = MC.Get_Direction_To(jellyfishcoord,
+                                                    playercoord)
                     MC.Walk_Direction_Persistantly(self.JellyfishId, direction)
+            else:
+                MC.Walk_Random_Failable(self.JellyfishId)
         else:
-            MC.Walk_Random(self.JellyfishId)
+            MC.Walk_Random_Failable(self.JellyfishId)
+            self.playerinvision = False

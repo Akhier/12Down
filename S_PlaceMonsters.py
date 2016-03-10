@@ -12,17 +12,21 @@ import Goblin
 import Hawk
 import Imp
 import Jellyfish
+import Kangaroo
+import Lion
 
 
 monsters = {1: Ant.make_ant, 2: Bat.make_bat, 3: Cat.make_cat,
             4: Dog.make_dog, 5: Elephant.make_elephant, 6: Frog.make_frog,
             7: Goblin.make_goblin, 8: Hawk.make_hawk, 9: Imp.make_imp,
-            10: Jellyfish.make_jellyfish}
+            10: Jellyfish.make_jellyfish, 11: Kangaroo.make_kangaroo,
+            12: Lion.make_lion}
 bossmonsters = {1: Ant.make_queen_ant, 2: Bat.make_vampire_bat,
                 3: Cat.make_twin_tailed_cat, 4: Dog.make_rabid_dog,
                 5: Elephant.make_pink_elephant, 6: Frog.make_poison_frog,
                 7: Goblin.make_hobgoblin, 8: Hawk.make_savage_hawk,
-                9: Imp.make_blue_imp, 10: Jellyfish.make_clear_jellyfish}
+                9: Imp.make_blue_imp, 10: Jellyfish.make_clear_jellyfish,
+                11: Kangaroo.make_electric_kangaroo, 12: Lion.make_dire_lion}
 
 
 def Place_Monsters_On_Level(dungeonlevelid):

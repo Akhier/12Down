@@ -100,4 +100,4 @@ class Frog_AI:
                     Message('The ' + frogtile.TileName + ' jumps.')
                     self.resting = True
         else:
-            MC.Blink_Random(self.FrogId, mindist=2, maxdist=3)
+            MC.Blink_Random_Failable(self.FrogId, mindist=2, maxdist=3)

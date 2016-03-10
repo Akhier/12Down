@@ -33,7 +33,18 @@ def Attack_Creature(attackid, attackerid, defenderid):
     baseroll = random.randint(1, 20)
     roll = baseroll + agimod
     dodge = False
-    if roll > 10 and 'Dodge' in defender.Special:
+    afraid = False
+    if 'Fear' in defender.Special:
+        chance = random.randint(1, 100)
+        if chance < defender.Special['Fear']:
+            afraid = True
+            if attackerid == config.PlayerId:
+                Message('A powerful fear stops you from attack!',
+                        color=Color.red)
+            else:
+                Message('The ' + attackertile.TileName +
+                        ' is suddenly too afraid to attack!')
+    elif roll > 10 and 'Dodge' in defender.Special:
         dodgechance = defender.Special['Dodge']
         chance = random.randint(1, 100)
         if chance <= dodgechance:
@@ -48,7 +59,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
                     Message('The ' + defendertile.TileName +
                             ' dodges your attack!',
                             color=Color.light_red)
-    if (roll > 10 or baseroll >= 19) and not dodge and baseroll != 1:
+    if (roll > 10 or baseroll >= 19) and not dodge and not afraid and \
+            baseroll != 1:
         damageroll = 0
         for i in range(attack.Dice):
             damageroll = random.randint(1, attack.Sides)
@@ -80,7 +92,10 @@ def Attack_Creature(attackid, attackerid, defenderid):
         defender.CurHp -= damage
         if damage > 0 and 'Paralyze' in attack.Special:
             chance = random.randint(1, 100)
-            if chance <= attack.Special['Paralyze']:
+            para = attack.Special['Paralyze']
+            if 'ParalyzeResistance' in defender.Special:
+                para -= defender.Special['ParalyzeResistance']
+            if chance <= para:
                 defender.Special['Paralyzed'] = True
         if damage > 0 and 'Poison' in attack.Special:
             (percentchance, turns, damage) = attack.Special['Poison']

@@ -104,19 +104,18 @@ class Imp_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
         level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.Level)
-        vision = config.fov.Coords_in_Sight(seethrough, impcoord.X,
-                                            impcoord.Y,
-                                            impcreature.VisionRange)
-        if playercoord in vision:
-            disttoplayer = hypot(impcoord.X - playercoord.X,
-                                 impcoord.Y - playercoord.Y)
-            if int(disttoplayer) <= 1:
-                Attack_Coord(self.BasicAttackId, self.FrogId,
-                             playercoord)
-                MC.Walk_Direction_Persistantly(
-                    self.ImpId, MC.Get_Direction_To(impcoord, playercoord))
-            else:
-                MC.Blink_Random(self.ImpId, 0, 2)
-        else:
-            MC.Blink_Random(self.ImpId, 3, 5)
+        seethrough = seethrough_map(level.MapId)
+        disttoplayer = hypot(impcoord.X - playercoord.X,
+                             impcoord.Y - playercoord.Y)
+        if disttoplayer < impcreature.VisionRange:
+            vision = config.fov.Coords_in_Sight(seethrough, impcoord.X,
+                                                impcoord.Y,
+                                                impcreature.VisionRange)
+            if playercoord in vision:
+                if int(disttoplayer) <= 1:
+                    Attack_Coord(self.BasicAttackId, self.ImpId,
+                                 playercoord)
+                    MC.Walk_Direction_Persistantly(
+                        self.ImpId, MC.Get_Direction_To(impcoord, playercoord))
+                else:
+                    MC.Blink_Random_Failable(self.ImpId, 0, 2)

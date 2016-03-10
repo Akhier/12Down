@@ -44,8 +44,26 @@ def Walk_Direction_Multiple(creatureid, direction, tilestowalk):
 def Walk_Random(creatureid):
     direction = [Direction.N, Direction.S, Direction.E, Direction.W,
                  Direction.NE, Direction.NW, Direction.SE, Direction.SW]
-    if not Walk_Direction_Persistantly(creatureid, direction):
+    if not Walk_Direction_Persistantly(creatureid, choice(direction)):
         Walk_Random(creatureid)
+
+
+def Walk_Random_Failable(creatureid):
+    direction = [Direction.N, Direction.S, Direction.E, Direction.W,
+                 Direction.NE, Direction.NW, Direction.SE, Direction.SW]
+    Walk_Direction_Persistantly(creatureid, choice(direction))
+
+
+def Walk_Random_Multiple(creatureid, mintiles, maxtiles):
+    numtiles = randint(mintiles, maxtiles)
+    for i in range(numtiles):
+        Walk_Random(creatureid)
+
+
+def Walk_Random_Multiple_Failable(creatureid, mintiles, maxtiles):
+    numtiles = randint(mintiles, maxtiles)
+    for i in range(numtiles):
+        Walk_Random_Failable(creatureid)
 
 
 def Get_Direction_To(sourcecoord, targetcoord):
@@ -170,3 +188,26 @@ def Blink_Random(creatureid, mindist=4, maxdist=10):
         cCoord.Y = newCoord.Y
     else:
         Blink_Random(creatureid, mindist, maxdist)
+
+
+def Blink_Random_Failable(creatureid, mindist=4, maxdist=10):
+    cCoord = CM.get_Component('Coord', creatureid)
+    x = randint(mindist, maxdist) * choice([-1, 1])
+    y = randint(mindist, maxdist) * choice([-1, 1])
+    newCoord = Coord(cCoord.X + x, cCoord.Y + y)
+    while newCoord.X < 1 or newCoord.X > config.playscreen_width - 3 or \
+            newCoord.Y < 1 or newCoord.Y > config.playscreen_height - 3:
+        x = randint(mindist, maxdist) * choice([-1, 1])
+        y = randint(mindist, maxdist) * choice([-1, 1])
+        newCoord = Coord(cCoord.X + x, cCoord.Y + y)
+    Coords = CM.dict_of('Coord')
+    walkable = True
+    for key, value in Coords.iteritems():
+        if value == newCoord:
+            if CM.check_Component('Tile', key):
+                tile = CM.get_Component('Tile', key)
+                if not tile.Passable:
+                    walkable = False
+    if walkable:
+        cCoord.X = newCoord.X
+        cCoord.Y = newCoord.Y

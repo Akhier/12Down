@@ -139,10 +139,14 @@ def render_statscreen():
         statlist.append('Side SideSwipe')
     if 'Dodge' in PC.Special:
         statlist.append('Ddg: ' + str(PC.Special['Dodge']))
+    if 'ParalyzeResistance' in PC.Special:
+        statlist.append('PRs: ' + str(PC.Special['ParalyzeResistance']))
     if 'CritChance' in PC.Special:
         statlist.append('Crt: ' + str(PC.Special['CritChance']))
     if 'ReduceCrit' in PC.Special:
         statlist.append('RCr: ' + str(PC.Special['ReduceCrit']))
+    if 'Fear' in PC.Special:
+        statlist.append('Fer: ' + str(PC.Special['Fear']))
     if 'RandomBlink' in PC.Special:
         statlist.append('Bnk: ' + str(PC.Special['RandomBlink']))
     if 'HealthPotion' in PC.Special:
