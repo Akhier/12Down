@@ -63,6 +63,7 @@ def Play_Game():
             actions = CM.dict_of('Action')
             keylist = list(actions.keys())
             creatures = CM.dict_of('Creature')
+            creatures = dict(creatures)
             for key in keylist:
                 if key in objectids:
                     if 'Paralyzed' in creatures[key].Special:

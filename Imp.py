@@ -96,7 +96,7 @@ class Imp_AI:
         self.ImpId = impid
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
-                         Attack(2, 4, special={'Poison': (50, 3, 1)}))
+                         Attack(2, 4, special={'CausePoison': (50, 3, 1)}))
 
     def take_turn(self):
         impcreature = CM.get_Component('Creature', self.ImpId)

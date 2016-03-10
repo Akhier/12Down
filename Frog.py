@@ -60,7 +60,7 @@ def poison_choice(poisonid):
         Message('Did you forget the first part of its name?')
     if choice == 1:
         playercreature.Special['CardinalLeap'] = (5, 5, 3)
-        Menu('You now feel like leaping. (ctrl + cardinal direction)')
+        Message('You now feel like leaping. (ctrl + cardinal direction)')
     if choice == 2:
         playercreature.Special['Poisoned'] = (5, 1, config.PlayerId)
         playercreature.Special['PoisonResistance'] = 10
@@ -73,7 +73,7 @@ class Frog_AI:
         self.FrogId = frogid
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
-                         Attack(1, 4, special={'Poison': (25, 5, 1)}))
+                         Attack(1, 4, special={'CausePoison': (25, 5, 1)}))
         self.resting = False
 
     def take_turn(self):

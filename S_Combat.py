@@ -97,8 +97,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 para -= defender.Special['ParalyzeResistance']
             if chance <= para:
                 defender.Special['Paralyzed'] = True
-        if damage > 0 and 'Poison' in attack.Special:
-            (percentchance, turns, damage) = attack.Special['Poison']
+        if damage > 0 and 'CausePoison' in attack.Special:
+            (percentchance, turns, damage) = attack.Special['CausePoison']
             chance = random.randint(1, 100)
             modpercentchance = 0
             if 'PoisonResistance' in defender.Special:

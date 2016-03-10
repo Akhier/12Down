@@ -69,7 +69,7 @@ def hobs_choice(hobsid):
                                              'PierceDefense': 5})
         Message('This seems to be a magic weapon which helps in combat!')
     if choice == 2:
-        playerattack.Special['Poison'] = (35, 5, 1)
+        playerattack.Special['CausePoison'] = (35, 5, 1)
         Message('The vial contains a sticky poison ' +
                 'so you apply it to your weapon.')
 
