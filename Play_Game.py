@@ -2,6 +2,7 @@ from ComponentManager import ComponentManager as CM
 from Handle_Keys import Handle_Keys
 from S_Combat import check_death
 from S_MapInfo import char_map
+from Message import Message
 from Render import Render
 from Menu import Menu
 import libtcodpy
@@ -35,7 +36,13 @@ def Play_Game():
             if config.visible[x][y]:
                 config.playscreen.write_ex(x, y, charmap[x][y],
                                            Color.map_tile_visible)
-        config.player_action = Handle_Keys()
+        playercreature = CM.get_Component('Creature', config.PlayerId)
+        if 'Paralyzed' in playercreature.Special:
+            playercreature.Special.pop('Paralyzed', None)
+            config.player_action = 'Paralyzed'
+            Message('You have been paralyzed for a turn', color=Color.red)
+        else:
+            config.player_action = Handle_Keys()
         if config.player_action == 'exit' or \
                 config.game_state == 'finished':
             if config.player_action == 'exit':
@@ -55,10 +62,16 @@ def Play_Game():
                 config.player_action != 'no action':
             actions = CM.dict_of('Action')
             keylist = list(actions.keys())
+            creatures = CM.dict_of('Creature')
             for key in keylist:
                 if key in objectids:
-                    actions[key].take_turn()
-            creatures = CM.dict_of('Creature')
+                    if 'Paralyzed' in creatures[key].Special:
+                        creatures[key].Special.pop('Paralyzed', None)
+                        tile = CM.get_Component('Tile', key)
+                        Message('The ' + tile.TileName + ' is paralyzed!',
+                                color=Color.sky)
+                    else:
+                        actions[key].take_turn()
             for Id, creature in creatures.iteritems():
                 if 'Poisoned' in creature.Special:
                     (turnsleft, damage, attackerid) = creature.Special[

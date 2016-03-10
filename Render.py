@@ -131,6 +131,8 @@ def render_statscreen():
     statlist.append('Atk: ' + str(PA.Dice) + 'd' + str(PA.Sides))
     if 'LifeDrain' in PA.Special:
         statlist.append('LDr: ' + str(PA.Special['LifeDrain']))
+    if 'Paralyze' in PA.Special:
+        statlist.append('Prz: ' + str(PA.Special['Paralyze']))
     if 'PierceDefense' in PA.Special:
         statlist.append('PDf: ' + str(PA.Special['PierceDefense']))
     if 'SideSwipe' in PC.Special:

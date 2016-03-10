@@ -78,6 +78,10 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 damage = 0
                 break
         defender.CurHp -= damage
+        if damage > 0 and 'Paralyze' in attack.Special:
+            chance = random.randint(1, 100)
+            if chance <= attack.Special['Paralyze']:
+                defender.Special['Paralyzed'] = True
         if damage > 0 and 'Poison' in attack.Special:
             (percentchance, turns, damage) = attack.Special['Poison']
             chance = random.randint(1, 100)
