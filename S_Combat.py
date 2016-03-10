@@ -48,7 +48,7 @@ def Attack_Creature(attackid, attackerid, defenderid):
                     Message('The ' + defendertile.TileName +
                             ' dodges your attack!',
                             color=Color.light_red)
-    if (roll > 10 or baseroll == 20) and not dodge and baseroll != 1:
+    if (roll > 10 or baseroll >= 19) and not dodge and baseroll != 1:
         damageroll = 0
         for i in range(attack.Dice):
             damageroll = random.randint(1, attack.Sides)

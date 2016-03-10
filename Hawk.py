@@ -46,7 +46,7 @@ def make_savage_hawk(coord, dungeonlevel):
     dungeonlevel.MonsterIds.append(newmonsterid)
 
 
-def savage_choice(savage_sid):
+def savage_choice(savageid):
     choice = None
     while choice is None:
         choice = Menu('The Savage hawk is grounded. ' +
