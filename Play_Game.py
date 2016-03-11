@@ -64,6 +64,16 @@ def Play_Game():
             keylist = list(actions.keys())
             creatures = CM.dict_of('Creature')
             creatures = dict(creatures)
+            poison = CM.dict_of('Poison')
+            if poison:
+                poison = dict(poison)
+                for key, value in poison.iteritems():
+                    creature = CM.get_Component('Creature', key)
+                    creature.CurHp -= value.Damage
+                    value.TurnsLeft -= 1
+                    check_death(value.SourceId, key, poison=True)
+                    if value.TurnsLeft <= 0:
+                        CM.remove_Component('Poison', key)
             for key in keylist:
                 if key in objectids:
                     if 'Paralyzed' in creatures[key].Special:
@@ -73,23 +83,13 @@ def Play_Game():
                                 color=Color.sky)
                     else:
                         actions[key].take_turn()
-            for Id, creature in creatures.iteritems():
-                if 'Poisoned' in creature.Special:
-                    (turnsleft, damage, attackerid) = creature.Special[
-                        'Poisoned']
-                    creature.CurHp -= damage
-                    turnsleft -= 1
-                    if turnsleft <= 0:
-                        creature.Special.pop('Poisoned', None)
-                    else:
-                        creature.Special['Poisoned'] = (
-                            turnsleft, damage, attackerid)
-                    check_death(attackerid, Id)
-                if 'CardinalLeap' in creature.Special:
-                    (need, cur, dist) = creature.Special['CardinalLeap']
+            for key, value in creatures.iteritems():
+                if 'CardinalLeap' in value.Special:
+                    (need, cur, dist) = value.Special['CardinalLeap']
                     if cur < need:
                         cur += 1
-                        creature.Special['CardinalLeap'] = (need, cur, dist)
+                        value.Special['CardinalLeap'] = (
+                            need, cur, dist)
 
 
 def check_level_up():
@@ -103,14 +103,14 @@ def check_level_up():
         playerlevel.level += 1
         config.xptolevel = level_up_xp
         choice = None
-        options = ['+2hp, +1Def, +1Str, +1Agi, +1Free',
+        options = ['+2hp, +1Def, +1Str, +1Agi',
                    '+4hp and +3Def', '+4hp and +3Str',
                    '+4hp and +3Agi', '+12hp']
         sdef = False
         sstr = False
         sagi = False
         if playercreature.BaseDefense > 3:
-            options.append('-4Def then +20hp')
+            options.append('-3Def then +18hp')
             sdef = True
         if playercreature.BaseStrength > 3:
             options.append('-3Str then +9Agi')
@@ -128,35 +128,21 @@ def check_level_up():
             playercreature.BaseDefense += 1
             playercreature.BaseStrength += 1
             playercreature.BaseAgility += 1
-            choice2 = None
-            while choice2 is None:
-                choice2 = Menu('Where do you want your free point?\n\n\n\n',
-                               ['+2hp', '+1Def', '+1Str', '+1Agi'],
-                               config.messagescreen_width)
-            if choice2 == 0:
-                playercreature.MaxHp += 2
-                playercreature.CurHp += 2
-            elif choice2 == 1:
-                playercreature.BaseDefense += 1
-            elif choice2 == 2:
-                playercreature.BaseStrength += 1
-            elif choice2 == 3:
-                playercreature.BaseAgility += 1
         elif choice == 1:
             playercreature.MaxHp += 4
             playercreature.CurHp += 4
-            playercreature.BaseDefense += 3
+            playercreature.BaseDefense += 2
         elif choice == 2:
             playercreature.MaxHp += 4
             playercreature.CurHp += 4
-            playercreature.BaseStrength += 3
+            playercreature.BaseStrength += 2
         elif choice == 3:
             playercreature.MaxHp += 4
             playercreature.CurHp += 4
-            playercreature.BaseAgility += 3
+            playercreature.BaseAgility += 2
         elif choice == 4:
-            playercreature.MaxHp += 12
-            playercreature.CurHp += 12
+            playercreature.MaxHp += 10
+            playercreature.CurHp += 10
         elif choice == 5:
             if sdef:
                 playercreature.BaseDefense -= 4

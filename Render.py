@@ -97,15 +97,14 @@ def render_statscreen():
     config.statscreen.set_default_background(Color.black)
     config.statscreen.set_default_foreground(Color.white)
     config.statscreen.clear
-    # playercoord = CM.get_Component('Coord', config.PlayerId)
-    # playertile = CM.get_Component('Tile', config.PlayerId)
     PC = CM.get_Component('Creature', config.PlayerId)
     PL = CM.get_Component('Level', config.PlayerId)
     PA = CM.get_Component('Attack', config.PlayerAttack)
     overflowhpcolor = Color.lighter_red
     curhpcolor = Color.light_red
     losthpcolor = Color.darker_red
-    if 'Poisoned' in PC.Special:
+    poison = CM.dict_of('Poison')
+    if config.PlayerId in poison:
         overflowhpcolor = Color.lighter_green
         curhpcolor = Color.light_green
         losthpcolor = Color.darker_green

@@ -19,6 +19,7 @@ import Color
 def New_Game():
     get_name()
     ECS_Storage.init()
+    CM.new_Component('Poison')
     config.DungeonLevelIds = {}
     config.CurrentDungeonLevel = 0
     config.PlayerId = EM.new_Id()

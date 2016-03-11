@@ -185,7 +185,7 @@ def next_level():
     config.fov_recompute = True
     config.playscreen.clear
     config.CurrentDungeonLevel += 1
-    if config.CurrentDungeonLevel < 26:
+    if config.CurrentDungeonLevel < 12:
         newlevelid = EM.new_Id()
         config.DungeonLevelIds[config.CurrentDungeonLevel] = newlevelid
         mapid = config.mapgen.create(newlevelid)

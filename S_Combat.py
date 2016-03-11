@@ -2,6 +2,7 @@ from ComponentManager import ComponentManager as CM
 from S_CreateStairs import create_stairs
 import S_PlaceMonsters as PM
 import S_MoveCreature as MC
+from C_Poison import Poison
 from Message import Message
 from C_Flags import Seen
 import random
@@ -99,11 +100,10 @@ def Attack_Creature(attackid, attackerid, defenderid):
                 defender.Special['Paralyzed'] = True
         if damage > 0 and 'CausePoison' in attack.Special:
             (percentchance, turns, damage) = attack.Special['CausePoison']
-            chance = random.randint(1, 100)
             modpercentchance = 0
             if 'PoisonResistance' in defender.Special:
                 modpercentchance = defender.Special['PoisonResistance']
-            if percentchance <= 0:
+            if percentchance <= modpercentchance:
                 if defenderid == config.PlayerId:
                     Message('You completely resist the poison!',
                             color=Color.yellow)
@@ -111,7 +111,8 @@ def Attack_Creature(attackid, attackerid, defenderid):
                     Message('The ' + defender.TileName +
                             ' completely resists the poison!',
                             color=Color.yellow)
-            if chance <= percentchance:
+            else:
+                chance = random.randint(1, 100)
                 if chance > percentchance - modpercentchance:
                     if defenderid == config.PlayerId:
                         Message('You resist the poison!',
@@ -132,13 +133,17 @@ def Attack_Creature(attackid, attackerid, defenderid):
                             newturns = turnsleft
                         else:
                             newturns = turns
-                        defender.Special['Poisoned'] = (
-                            newturns, newdamage, attackerid)
+                        # defender.Special['Poisoned'] = (
+                        #     newturns, newdamage, attackerid)
+                        CM.add_Component(defenderid, 'Poison', Poison(
+                            newturns, newdamage, attackid))
                     else:
                         newturns = turns
                         newdamage = damage
-                        defender.Special['Poisoned'] = (
-                            newturns, newdamage, attackerid)
+                        # defender.Special['Poisoned'] = (
+                        #     newturns, newdamage, attackerid)
+                        CM.add_Component(defenderid, 'Poison', Poison(
+                            newturns, newdamage, attackid))
                     if defenderid == config.PlayerId:
                         Message('You are now poisoned for ' +
                                 str(newturns) + ' turns!',
@@ -195,11 +200,13 @@ def Attack_Coord(attackid, attackerid, coordtoattack):
         Attack_Creature(attackid, attackerid, key)
 
 
-def check_death(attackerid, defenderid):
-    attacker = CM.get_Component('Creature', attackerid)
+def check_death(attackerid, defenderid, poison=False):
+    if not poison:
+        attacker = CM.get_Component('Creature', attackerid)
     defender = CM.get_Component('Creature', defenderid)
     if defender.CurHp <= 0:
-        attacker.Xp += defender.Xp
+        if not poison:
+            attacker.Xp += defender.Xp
         if 'LifeSaver' in defender.Special:
             defender.Special['LifeSaver'] -= 1
             if defender.Special['LifeSaver'] <= 0:
