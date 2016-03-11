@@ -4,6 +4,7 @@ from EntityManager import EntityManager as EM
 from Enum_Direction import Direction as Dir
 from C_DungeonLevel import DungeonLevel
 from S_Combat import Attack_Coord
+from End_Game import End_Game
 import S_MoveCreature as MC
 from Menu import Menu
 import libtcodpy
@@ -193,4 +194,4 @@ def next_level():
         CM.add_Component(newlevelid, 'DungeonLevel', newlevel)
         Place_Monsters_On_Level(newlevelid)
     else:
-        pass   # End game screen
+        End_Game(finished=True)

@@ -13,7 +13,10 @@ while not config.gamewindow.is_window_closed:
     config.gamewindow.write(config.window_width / 2,
                             config.window_height - 2,
                             'By Akhier', align=config.CENTER)
-    choice = Menu('', ['New game', 'Quit'], 14)
+    if config.game_state == 'Quit':
+        choice = 1
+    else:
+        choice = Menu('', ['New game', 'Quit'], 14)
     if choice == 0:
         New_Game()
         Play_Game()

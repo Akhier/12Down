@@ -133,15 +133,11 @@ def Attack_Creature(attackid, attackerid, defenderid):
                             newturns = turnsleft
                         else:
                             newturns = turns
-                        # defender.Special['Poisoned'] = (
-                        #     newturns, newdamage, attackerid)
                         CM.add_Component(defenderid, 'Poison', Poison(
                             newturns, newdamage, attackid))
                     else:
                         newturns = turns
                         newdamage = damage
-                        # defender.Special['Poisoned'] = (
-                        #     newturns, newdamage, attackerid)
                         CM.add_Component(defenderid, 'Poison', Poison(
                             newturns, newdamage, attackid))
                     if defenderid == config.PlayerId:

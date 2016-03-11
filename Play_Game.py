@@ -2,6 +2,7 @@ from ComponentManager import ComponentManager as CM
 from Handle_Keys import Handle_Keys
 from S_Combat import check_death
 from S_MapInfo import char_map
+from End_Game import End_Game
 from Message import Message
 from Render import Render
 from Menu import Menu
@@ -44,15 +45,15 @@ def Play_Game():
         else:
             config.player_action = Handle_Keys()
         if config.player_action == 'exit' or \
-                config.game_state == 'finished':
+                config.game_state == 'finished' or\
+                config.game_state == 'Quit':
             if config.player_action == 'exit':
                 choice = None
                 while choice is None:
                     choice = Menu('Are you sure you want to Quit?',
                                   ['Yes I want to quit', 'No'], 34)
                 if choice == 0:
-                    config.gamewindow.clear
-                    config.playscreen.clear
+                    End_Game()
                     break
             else:
                 config.gamewindow.clear
