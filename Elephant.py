@@ -60,8 +60,8 @@ def pink_choice(pinkid):
     playercreature = CM.get_Component('Creature', config.PlayerId)
     if choice == 0:
         playercreature.Special['RandomBlink'] = 10
-        Menu('You feel that these sparkles will let you blink around a ' +
-             'few times. (Ctrl + b)')
+        Message('You feel that these sparkles will let you blink around a ' +
+                'few times. (Ctrl + b)')
     if choice == 1:
         if playercreature.BaseDefense < 2:
             playercreature.BaseDefense = 2

@@ -79,7 +79,7 @@ class Goblin_AI:
     def __init__(self, goblinid):
         self.GoblinId = goblinid
         self.BasicAttackId = EM.new_Id
-        CM.add_Component(self.BasicAttackId, 'Attack', Attack(2, 3))
+        CM.add_Component(self.BasicAttackId, 'Attack', Attack(3, 2))
         self.nearbygoblins = []
 
     def take_turn(self):

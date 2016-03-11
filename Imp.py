@@ -66,6 +66,10 @@ def blue_choice(blueid):
             playercreature.Special['PoisonResistance'] += 10
         else:
             playercreature.Special['PoisonResistance'] = 25
+        if playercreature.BaseDefense < 5:
+            playercreature.BaseDefense = 5
+        else:
+            playercreature.BaseDefense += 1
         if 'Poisoned' in playercreature.Special:
             (turns, damage, sourceid) = playercreature.Special['Poisoned']
             turns += 1

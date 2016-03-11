@@ -61,7 +61,9 @@ def electric_choice(electricid):
             playercreature.Special['ParalyzeResistance'] += 2
         else:
             playercreature.Special['ParalyzeResistance'] = 5
-        if playercreature.BaseDefense < 10:
+        if playercreature.BaseDefense < 5:
+            playercreature.BaseDefense = 5
+        else:
             playercreature.BaseDefense += 1
         Message('Shocking!')
     if choice == 1:
@@ -72,6 +74,8 @@ def electric_choice(electricid):
                 need = 3
                 dist += 1
             playercreature.Special['CardinalLeap'] = (need, need, dist)
+        else:
+            playercreature.Special['CardinalLeap'] = (5, 5, 3)
         Message('Feet apperently equals leaping. (ctrl + cardinal direction)')
     if choice == 2:
         if playercreature.MaxHp < 20:

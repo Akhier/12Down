@@ -115,7 +115,4 @@ class Cat_AI:
                     shortestdist = (coord, dist)
             if shortestdist[0]:
                 direction = MC.Get_Direction_To(shortestdist[0], catcoord)
-                if not MC.Walk_Direction(self.CatId, direction):
-                    directions = MC.Get_Alt_Direction_To(direction)
-                    if not MC.Walk_Direction(self.CatId, directions[0]):
-                        MC.Walk_Direction(self.CatId, directions[1])
+                MC.Walk_Direction_Persistantly(self.CatId, direction)

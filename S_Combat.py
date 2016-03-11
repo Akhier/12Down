@@ -117,10 +117,6 @@ def Attack_Creature(attackid, attackerid, defenderid):
                     if defenderid == config.PlayerId:
                         Message('You resist the poison!',
                                 color=Color.yellow)
-                    else:
-                        Message('The ' + defender.TileName +
-                                ' resists the poison!',
-                                color=Color.yellow)
                 else:
                     if 'Poisoned' in defender.Special:
                         (turnsleft, damageturn, sourceid) = defender.Special[

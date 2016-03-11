@@ -2,7 +2,6 @@ from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
-from S_MapInfo import seethrough_map
 from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack

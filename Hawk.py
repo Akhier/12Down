@@ -75,6 +75,8 @@ def savage_choice(savageid):
                 need = 3
                 dist += 1
             playercreature.Special['CardinalLeap'] = (need, need, dist)
+        else:
+            playercreature.Special['CardinalLeap'] = (5, 5, 3)
         Message('The seems like it can occasionally ' +
                 'boost your leaping ability. (ctrl + cardinal direction)')
 
