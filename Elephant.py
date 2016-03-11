@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from Enum_Direction import Direction as D
@@ -88,7 +89,8 @@ class Elephant_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         disttoplayer = hypot(elephantcoord.X - playercoord.X,
                              elephantcoord.Y - playercoord.Y)
-        if disttoplayer < elephantcreature.VisionRange:
+        if disttoplayer < elephantcreature.VisionRange and \
+                coordfov(elephantcoord, playercoord):
             if int(disttoplayer) <= 1:
                 if not self.resting:
                     Attack_Coord(self.BasicAttackId, self.ElephantId,

@@ -1,7 +1,7 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
-from S_MapInfo import seethrough_map
 from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack
@@ -91,26 +91,18 @@ class Hawk_AI:
         hawkcreature = CM.get_Component('Creature', self.HawkId)
         hawkcoord = CM.get_Component('Coord', self.HawkId)
         playercoord = CM.get_Component('Coord', config.PlayerId)
-        levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-        level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.MapId)
         disttoplayer = hypot(hawkcoord.X - playercoord.X,
                              hawkcoord.Y - playercoord.Y)
-        if disttoplayer < hawkcreature.VisionRange:
-            vision = config.fov.Coords_in_Sight(seethrough, hawkcoord.X,
-                                                hawkcoord.Y,
-                                                hawkcreature.VisionRange)
-            if playercoord in vision:
-                if int(disttoplayer) <= 1:
-                    Attack_Coord(self.BasicAttackId, self.HawkId,
-                                 playercoord)
-                    MC.Walk_Direction_Persistantly(
-                        self.HawkId, MC.Get_Direction_To(
-                            hawkcoord, playercoord))
-                else:
-                    direction = MC.Get_Direction_To(hawkcoord, playercoord)
-                    MC.Walk_Direction_Persistantly(self.HawkId, direction)
+        if disttoplayer < hawkcreature.VisionRange and \
+                coordfov(hawkcoord, playercoord):
+            if int(disttoplayer) <= 1:
+                Attack_Coord(self.BasicAttackId, self.HawkId,
+                             playercoord)
+                MC.Walk_Direction_Persistantly(
+                    self.HawkId, MC.Get_Direction_To(
+                        hawkcoord, playercoord))
             else:
-                MC.Walk_Random_Failable(self.HawkId)
+                direction = MC.Get_Direction_To(hawkcoord, playercoord)
+                MC.Walk_Direction_Persistantly(self.HawkId, direction)
         else:
             MC.Walk_Random_Failable(self.HawkId)

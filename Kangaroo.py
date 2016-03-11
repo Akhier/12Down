@@ -1,7 +1,7 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
-from S_MapInfo import seethrough_map
 from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack
@@ -119,20 +119,10 @@ class Kangaroo_AI:
         kangaroocreature = CM.get_Component('Creature', self.KangarooId)
         kangaroocoord = CM.get_Component('Coord', self.KangarooId)
         playercoord = CM.get_Component('Coord', config.PlayerId)
-        levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-        level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.MapId)
         disttoplayer = hypot(kangaroocoord.X - playercoord.X,
                              kangaroocoord.Y - playercoord.Y)
         if disttoplayer <= kangaroocreature.VisionRange and \
-                not self.playerinvision:
-            vision = config.fov.Coords_in_Sight(seethrough, kangaroocoord.X,
-                                                kangaroocoord.Y,
-                                                kangaroocreature.VisionRange)
-            if playercoord in vision:
-                self.playerinvision = True
-        if disttoplayer <= kangaroocreature.VisionRange and \
-                self.playerinvision:
+                coordfov(kangaroocoord, playercoord):
             if int(disttoplayer) <= 1:
                 Attack_Coord(self.BasicAttackId, self.KangarooId,
                              playercoord)

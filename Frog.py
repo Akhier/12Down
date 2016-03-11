@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
@@ -74,7 +75,7 @@ class Frog_AI:
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
                          Attack(1, 4, special={'CausePoison': (25, 5, 1)}))
-        self.resting = False
+        self.resting = 0
 
     def take_turn(self):
         frogcreature = CM.get_Component('Creature', self.FrogId)
@@ -83,21 +84,22 @@ class Frog_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         disttoplayer = hypot(frogcoord.X - playercoord.X,
                              frogcoord.Y - playercoord.Y)
-        if disttoplayer < frogcreature.VisionRange:
+        if disttoplayer < frogcreature.VisionRange and \
+                coordfov(frogcoord, playercoord):
             if int(disttoplayer) <= 1:
                 Attack_Coord(self.BasicAttackId, self.FrogId,
                              playercoord)
             else:
                 direction = MC.Get_Direction_To(frogcoord, playercoord)
-                if self.resting:
+                if self.resting <= 0:
                     if not MC.Walk_Direction(self.FrogId, direction):
                         directions = MC.Get_Alt_Direction_To(direction)
                         if not MC.Walk_Direction(self.FrogId, directions[0]):
                             MC.Walk_Direction(self.FrogId, directions[1])
-                    self.resting = False
+                    self.resting = 2
                 else:
                     MC.Walk_Direction_Multiple(self.FrogId, direction, 3)
                     Message('The ' + frogtile.TileName + ' jumps.')
-                    self.resting = True
+                    self.resting -= 1
         else:
-            MC.Blink_Random_Failable(self.FrogId, mindist=2, maxdist=3)
+            MC.Walk_Random_Failable(self.FrogId)

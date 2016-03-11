@@ -1,7 +1,7 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
-from S_MapInfo import seethrough_map
 from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack
@@ -102,16 +102,10 @@ class Imp_AI:
         impcreature = CM.get_Component('Creature', self.ImpId)
         impcoord = CM.get_Component('Coord', self.ImpId)
         playercoord = CM.get_Component('Coord', config.PlayerId)
-        levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-        level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.MapId)
         disttoplayer = hypot(impcoord.X - playercoord.X,
                              impcoord.Y - playercoord.Y)
         if disttoplayer < impcreature.VisionRange:
-            vision = config.fov.Coords_in_Sight(seethrough, impcoord.X,
-                                                impcoord.Y,
-                                                impcreature.VisionRange)
-            if playercoord in vision:
+            if coordfov(impcoord, playercoord):
                 if int(disttoplayer) <= 1:
                     Attack_Coord(self.BasicAttackId, self.ImpId,
                                  playercoord)

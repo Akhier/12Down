@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
@@ -83,35 +84,21 @@ class Jellyfish_AI:
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack',
                          Attack(2, 4, special={'Paralyze': 5}))
-        self.playerinvision = False
 
     def take_turn(self):
         jellyfishcreature = CM.get_Component('Creature', self.JellyfishId)
         jellyfishcoord = CM.get_Component('Coord', self.JellyfishId)
         playercoord = CM.get_Component('Coord', config.PlayerId)
-        levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-        level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.MapId)
         disttoplayer = hypot(jellyfishcoord.X - playercoord.X,
                              jellyfishcoord.Y - playercoord.Y)
-        if not self.playerinvision and \
-                disttoplayer <= jellyfishcreature.VisionRange:
-            vision = config.fov.Coords_in_Sight(seethrough, jellyfishcoord.X,
-                                                jellyfishcoord.Y,
-                                                jellyfishcreature.VisionRange)
-            if playercoord in vision:
-                self.playerinvision = True
-        if disttoplayer <= jellyfishcreature.VisionRange:
-            if self.playerinvision:
-                if int(disttoplayer) <= 1:
-                    Attack_Coord(self.BasicAttackId, self.JellyfishId,
-                                 playercoord)
-                else:
-                    direction = MC.Get_Direction_To(jellyfishcoord,
-                                                    playercoord)
-                    MC.Walk_Direction_Persistantly(self.JellyfishId, direction)
+        if disttoplayer <= jellyfishcreature.VisionRange and \
+                coordfov(jellyfishcoord, playercoord):
+            if int(disttoplayer) <= 1:
+                Attack_Coord(self.BasicAttackId, self.JellyfishId,
+                             playercoord)
             else:
-                MC.Walk_Random_Failable(self.JellyfishId)
+                direction = MC.Get_Direction_To(jellyfishcoord,
+                                                playercoord)
+                MC.Walk_Direction_Persistantly(self.JellyfishId, direction)
         else:
             MC.Walk_Random_Failable(self.JellyfishId)
-            self.playerinvision = False

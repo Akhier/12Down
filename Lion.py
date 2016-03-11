@@ -1,6 +1,6 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from S_DistanceBetweenCoords import get_distance
-from S_CoordtoCoordFov import coord_to_coord_fov
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
 from S_Combat import Attack_Coord
@@ -91,7 +91,6 @@ class Lion_AI:
         else:
             CM.add_Component(self.BasicAttackId, 'Attack',
                              Attack(2, 6, special={'PierceDefense': 10}))
-        self.playerinvision = False
 
     def take_turn(self):
         lioncreature = CM.get_Component('Creature', self.LionId)
@@ -99,36 +98,28 @@ class Lion_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         disttoplayer = get_distance(lioncoord, playercoord)
         if disttoplayer <= lioncreature.VisionRange and \
-                not self.playerinvision:
-            self.playerinvision = coord_to_coord_fov(lioncoord, playercoord)
-        if self.playerinvision:
-            if disttoplayer <= lioncreature.VisionRange:
-                if int(disttoplayer) <= 1:
-                    Attack_Coord(self.BasicAttackId, self.LionId,
-                                 playercoord)
-                else:
-                    direction = MC.Get_Direction_To(lioncoord, playercoord)
-                    MC.Walk_Direction_Persistantly(self.LionId, direction)
+                coordfov(lioncoord, playercoord):
+            if int(disttoplayer) <= 1:
+                Attack_Coord(self.BasicAttackId, self.LionId,
+                             playercoord)
             else:
-                self.lion_else(lioncreature, lioncoord)
+                direction = MC.Get_Direction_To(lioncoord, playercoord)
+                MC.Walk_Direction_Persistantly(self.LionId, direction)
         else:
-            self.lion_else(lioncreature, lioncoord)
-
-    def lion_else(self, lioncreature, lioncoord):
-        coord = CM.dict_of('Coord')
-        tile = CM.dict_of('Tile')
-        dist = (lioncreature.VisionRange, False)
-        for key, coord in coord.iteritems():
-            if get_distance(coord, lioncoord) <= \
-                lioncreature.VisionRange and key != self.LionId and \
-                    (tile[key].TileName == 'Lion' or
-                        tile[key].TileName == 'Dire Lion'):
-                newdist = get_distance(lioncoord, coord)
-                if newdist < dist:
-                    dist = (newdist, coord)
-        if dist[1]:
-            if dist[0] < 2:
-                direction = MC.Get_Direction_To(dist[1], lioncoord)
-            else:
-                direction = MC.Get_Direction_To(lioncoord, dist[1])
-            MC.Walk_Direction_Persistantly(self.LionId, direction)
+            coord = CM.dict_of('Coord')
+            tile = CM.dict_of('Tile')
+            dist = (lioncreature.VisionRange, False)
+            for key, coord in coord.iteritems():
+                if get_distance(coord, lioncoord) <= \
+                    lioncreature.VisionRange and key != self.LionId and \
+                        (tile[key].TileName == 'Lion' or
+                            tile[key].TileName == 'Dire Lion'):
+                    newdist = get_distance(lioncoord, coord)
+                    if newdist < dist:
+                        dist = (newdist, coord)
+            if dist[1]:
+                if dist[0] < 2:
+                    direction = MC.Get_Direction_To(dist[1], lioncoord)
+                else:
+                    direction = MC.Get_Direction_To(lioncoord, dist[1])
+                MC.Walk_Direction_Persistantly(self.LionId, direction)

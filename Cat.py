@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
@@ -88,7 +89,8 @@ class Cat_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         disttoplayer = hypot(catcoord.X - playercoord.X,
                              catcoord.Y - playercoord.Y)
-        if disttoplayer < catcreature.VisionRange:
+        if disttoplayer < catcreature.VisionRange and \
+                coordfov(catcoord, playercoord):
             if int(disttoplayer) <= 1:
                 Attack_Coord(self.BasicAttackId, self.CatId, playercoord)
             else:

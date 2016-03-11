@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from Enum_Direction import Direction as D
@@ -90,7 +91,8 @@ class Dog_AI:
         playercoord = CM.get_Component('Coord', config.PlayerId)
         disttoplayer = hypot(dogcoord.X - playercoord.X,
                              dogcoord.Y - playercoord.Y)
-        if disttoplayer < dogcreature.VisionRange:
+        if disttoplayer < dogcreature.VisionRange and \
+                coordfov(dogcoord, playercoord):
             if int(disttoplayer) <= 1:
                 Attack_Coord(self.BasicAttackId, self.DogId, playercoord)
             else:

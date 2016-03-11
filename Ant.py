@@ -1,3 +1,4 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
@@ -90,11 +91,12 @@ class Ant_AI:
         disttoplayer = hypot(antcoord.X - playercoord.X,
                              antcoord.Y - playercoord.Y)
         if disttoplayer < antcreature.VisionRange:
-            if int(disttoplayer) <= 1:
-                Attack_Coord(self.BasicAttackId, self.AntId, playercoord)
-            else:
-                direction = MC.Get_Direction_To(antcoord, playercoord)
-                if not MC.Walk_Direction(self.AntId, direction):
-                    directions = MC.Get_Alt_Direction_To(direction)
-                    if not MC.Walk_Direction(self.AntId, directions[0]):
-                        MC.Walk_Direction(self.AntId, directions[1])
+            if coordfov(antcoord, playercoord):
+                if int(disttoplayer) <= 1:
+                    Attack_Coord(self.BasicAttackId, self.AntId, playercoord)
+                else:
+                    direction = MC.Get_Direction_To(antcoord, playercoord)
+                    if not MC.Walk_Direction(self.AntId, direction):
+                        directions = MC.Get_Alt_Direction_To(direction)
+                        if not MC.Walk_Direction(self.AntId, directions[0]):
+                            MC.Walk_Direction(self.AntId, directions[1])

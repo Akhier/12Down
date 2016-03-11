@@ -1,8 +1,8 @@
+from S_CoordtoCoordFov import coord_to_coord_fov as coordfov
 from ComponentManager import ComponentManager as CM
 from S_DistanceBetweenCoords import get_distance
 from EntityManager import EntityManager as EM
 from C_Death import Death, death_cleanup
-from S_MapInfo import seethrough_map
 from S_Combat import Attack_Coord
 from C_Creature import Creature
 from C_Attack import Attack
@@ -81,56 +81,40 @@ class Goblin_AI:
         self.BasicAttackId = EM.new_Id
         CM.add_Component(self.BasicAttackId, 'Attack', Attack(2, 3))
         self.nearbygoblins = []
-        self.playerinvision = False
 
     def take_turn(self):
         goblincreature = CM.get_Component('Creature', self.GoblinId)
         goblincoord = CM.get_Component('Coord', self.GoblinId)
         playercoord = CM.get_Component('Coord', config.PlayerId)
-        levelid = config.DungeonLevelIds[config.CurrentDungeonLevel]
-        level = CM.get_Component('DungeonLevel', levelid)
-        seethrough = seethrough_map(level.MapId)
         disttoplayer = hypot(goblincoord.X - playercoord.X,
                              goblincoord.Y - playercoord.Y)
-        if disttoplayer <= goblincreature.VisionRange:
-            if not self.playerinvision:
-                vision = config.fov.Coords_in_Sight(seethrough, goblincoord.X,
-                                                    goblincoord.Y,
-                                                    goblincreature.VisionRange)
-                if playercoord in vision:
-                    self.playerinvision = True
-            if self.playerinvision:
+        if disttoplayer <= goblincreature.VisionRange and \
+                coordfov(goblincoord, playercoord):
                 if int(disttoplayer) <= 1:
                     Attack_Coord(self.BasicAttackId, self.GoblinId,
                                  playercoord)
                 else:
                     direction = MC.Get_Direction_To(goblincoord, playercoord)
                     MC.Walk_Direction_Persistantly(self.GoblinId, direction)
+        else:
+            curnearbygoblins = []
+            tiles = CM.dict_of('Tile')
+            coords = CM.dict_of('Coord')
+            for key, value in tiles.iteritems():
+                if (value.TileName == 'Goblin' or
+                        value.TileName == 'Hobgoblin') and \
+                        key != self.GoblinId:
+                    if get_distance(goblincoord, coords[key]) <= \
+                            goblincreature.VisionRange:
+                        curnearbygoblins.append(key)
+            if not self.nearbygoblins:
+                self.nearbygoblins = curnearbygoblins
             else:
-                self.gob_else(goblincreature, goblincoord)
-        else:
-            self.playerinvision = False
-            self.gob_else(goblincreature, goblincoord)
-
-    def gob_else(self, goblincreature, goblincoord):
-        curnearbygoblins = []
-        tiles = CM.dict_of('Tile')
-        coords = CM.dict_of('Coord')
-        for key, value in tiles.iteritems():
-            if (value.TileName == 'Goblin' or
-                    value.TileName == 'Hobgoblin') and \
-                    key != self.GoblinId:
-                if get_distance(goblincoord, coords[key]) <= \
-                        goblincreature.VisionRange:
-                    curnearbygoblins.append(key)
-        if not self.nearbygoblins:
-            self.nearbygoblins = curnearbygoblins
-        else:
-            direction = False
-            for key in curnearbygoblins:
-                if key not in self.nearbygoblins:
-                    direction = MC.Get_Direction_To(
-                        goblincoord, coords[key])
-                    break
-            if direction:
-                MC.Walk_Direction_Persistantly(self.GoblinId, direction)
+                direction = False
+                for key in curnearbygoblins:
+                    if key not in self.nearbygoblins:
+                        direction = MC.Get_Direction_To(
+                            goblincoord, coords[key])
+                        break
+                if direction:
+                    MC.Walk_Direction_Persistantly(self.GoblinId, direction)
