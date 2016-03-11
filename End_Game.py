@@ -20,7 +20,7 @@ def End_Game(finished=False):
         header = '\n\nSadly you died in the dungeon. ' +\
             'Better luck next time ' + \
             config.PlayerId
-    header += '\n\nDungeon Level: ' + config.CurrentDungeonLevel + \
+    header += '\n\nDungeon Level: ' + str(config.CurrentDungeonLevel) + \
         '\nLevel: ' + str(PL.level) + \
         '   Max Hp: ' + str(PC.MaxHp) + \
         '   Defense: ' + str(PC.Defense) + \

@@ -211,6 +211,7 @@ def check_death(attackerid, defenderid, poison=False):
             if 'Poisoned' in defender.Special:
                 defender.Special.pop('Poisoned', None)
             MC.Teleport_Random(defenderid)
+            config.fov_recompute = True
         else:
             dungeonlevelid = config.DungeonLevelIds[
                 config.CurrentDungeonLevel]
